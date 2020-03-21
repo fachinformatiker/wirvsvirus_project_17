@@ -9,3 +9,4 @@ db = SQLAlchemy(app)
 
 
 import control_service.views
+import control_service.register

@@ -1,5 +1,6 @@
-from flask import Blueprint, jsonify, request
-from flask.json import jsonify
+from flask import Blueprint, jsonify, request, abort
+from functools import wraps
+from control_service import app
 
 register = Blueprint('register', __name__)
 
@@ -18,6 +19,4 @@ def index():
 
         return jsonify(response)
     except Exception:
-        response = {}
-        response['Success'] = False
-        return jsonify(response)
+        abort(400)
