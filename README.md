@@ -1,11 +1,11 @@
 # #wirvsvirus
 
-#Control-Service Team
+#Input-Service Team
 
-```bash
-export FLASK_APP=control_service
+```sh
+export FLASK_APP=input_service
 export FLASK_ENV=development
-cd control_service
+cd input_service
 flask run
 ```
 
