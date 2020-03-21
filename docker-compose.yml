@@ -11,6 +11,7 @@ services:
       #- "traefik.http.routers.controlservice.rule=Host(`controlservice.localhost`)" 
       - "traefik.http.services.controlservice.loadbalancer.server.port=5000"
       - "traefik.http.routers.controlservice.entrypoints=websecure"
+      - "traefik.http.routers.controlservice.entrypoints=web"
       - "traefik.http.routers.controlservice.tls.certresolver=myresolver"
 
     networks:
@@ -26,6 +27,7 @@ services:
       #- "traefik.http.routers.inputservice.rule=Host(`inputservice.localhost`)" 
       - "traefik.http.services.inputservice.loadbalancer.server.port=5000"
       - "traefik.http.routers.inputservice.entrypoints=websecure"
+      - "traefik.http.routers.inputservice.entrypoints=web"
       - "traefik.http.routers.inputservice.tls.certresolver=myresolver"
 
     networks:
@@ -41,7 +43,7 @@ services:
       - "--providers.docker.exposedbydefault=false"
       - "--entrypoints.web.address=:80"
       - "--entrypoints.websecure.address=:443"
-      - "--certificatesresolvers.myresolver.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory"
+      - "--certificatesresolvers.myresolver.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory"  #comment me out for production 
       - "--certificatesresolvers.myresolver.acme.httpchallenge=true"
       - "--certificatesresolvers.myresolver.acme.httpchallenge.entrypoint=web"
       - "--certificatesresolvers.myresolver.acme.email=squallhalle@gmail.com"
@@ -49,7 +51,7 @@ services:
     ports:
       - "80:80"
       - "443:443"
-      - "8081:8080" #NOT IN PRODUCTION PLEASE
+      - "8080:8080" #NOT IN PRODUCTION PLEASE
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
       - "./letsencrypt:/letsencrypt"
@@ -63,10 +65,10 @@ services:
     container_name: "helloweb"
     labels:
       - "traefik.enable=true"
-
       - "traefik.http.routers.helloweb.rule=Host(`test.isolatedshopping.me`)"
       #- "traefik.http.routers.helloweb.rule=Host(`test.localhost`)" 
       - "traefik.http.routers.helloweb.entrypoints=websecure"
+      - "traefik.http.routers.helloweb.entrypoints=web"
       - "traefik.http.routers.helloweb.tls.certresolver=myresolver"
     networks:
       - "this"
