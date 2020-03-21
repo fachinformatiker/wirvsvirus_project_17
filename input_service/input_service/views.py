@@ -58,7 +58,3 @@ def authorize_token(f):
       return {
         "Error": 'token not valid'
       }
-
-    try:
-      data = jwt.decode(token, app.config[SECRET])
-      # ...
