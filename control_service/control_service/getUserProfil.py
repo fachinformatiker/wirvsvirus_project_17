@@ -8,13 +8,13 @@ def getUserProfil():
     try:
         data = request.json
 
-        username = data['Token']
+        reqToken = data['Token']
 
-        # @TODO: DB Client
+        userEntity = db.session.query(UserData).filter_by(token == reqToken).first()
 
         response = {}
-        response['Username'] = "ChuckNorris"
-        response['MarketId'] = 4711
+        response['Username'] = userEntity['user_name']
+        response['MarketId'] = userEntity['market_id']
 
         return jsonify(response)
     except Exception:
