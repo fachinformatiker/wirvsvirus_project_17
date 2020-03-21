@@ -1,22 +1,14 @@
 # #wirvsvirus
+##Control-Service Team
 
-### how to install
-
-```sh
-$ pip install -r requirements.txt
-```
-
-### how to use our code
-
-#Input-Service Team
-
-```sh
-export FLASK_APP=input_service
+```bash
+export FLASK_APP=control_service
 export FLASK_ENV=development
-cd input_service
+
+cd control_service
 flask run
 ```
-
+=======
 #Control-Service Team
 
 ```sh
