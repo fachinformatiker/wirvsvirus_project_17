@@ -39,9 +39,12 @@ services:
       - "--providers.docker.exposedbydefault=false"
       - "--entrypoints.web.address=:80"
       - "--entrypoints.websecure.address=:443"
-      - "--certificatesresolvers.mytlschallenge.acme.tlschallenge=true"
       - "--certificatesresolvers.mytlschallenge.acme.email=squallhalle@gmail.com"
       - "--certificatesresolvers.mytlschallenge.acme.storage=/letsencrypt/acme.json"
+      - "--certificatesresolvers.mytlschallenge.acme.storage=acme.json
+      - "--certificatesresolvers.mytlschallenge.acme.dnschallenge=true
+      - "--certificatesresolvers.mytlschallenge.acme.dnschallenge.provider=route53
+      - "--certificatesresolvers.mytlschallenge.acme.dnsChallenge.delayBeforeCheck=0
     ports:
       - "80:80"
       - "433:443"
