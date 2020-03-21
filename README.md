@@ -5,7 +5,6 @@
 ```bash
 export FLASK_APP=control_service
 export FLASK_ENV=development
-
 cd control_service
 flask run
 ```
