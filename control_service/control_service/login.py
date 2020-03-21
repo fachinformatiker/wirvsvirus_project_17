@@ -15,6 +15,9 @@ def login():
     userEntity = db.session.query(UserData).filter_by(user_name = reqUsername, password = reqPassword).first()
 
     response = {}
-    response['Token'] = userEntity['token']
+    if(userEntity is not None):
+        response['Token'] = userEntity['token']
+    else:
+        abort(403)
 
     return jsonify(response)
