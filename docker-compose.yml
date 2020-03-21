@@ -49,8 +49,7 @@ services:
       - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
       ###
       - "traefik.http.routers.traefik-router0.entrypoints=web"
-      - "traefik.http.routers.traefik-router0.rule=Host(`traefik.example.tld`)"
-      - "traefik.http.routers.traefik-router0.middlewares=traefik-redirectscheme,auth"
+      - "traefik.http.routers.traefik-router0.middlewares=traefik-redirectscheme"
       - "traefik.http.middlewares.traefik-redirectscheme.redirectscheme.scheme=websecure"
     ports:
       - "80:80"
