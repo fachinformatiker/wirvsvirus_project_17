@@ -12,10 +12,6 @@ services:
       - "traefik.http.services.controlservice.loadbalancer.server.port=5000"
       - "traefik.http.routers.controlservice.entrypoints=websecure"
       - "traefik.http.routers.controlservice.tls.certresolver=myresolver"
-      - "traefik.http.routers.https-redirect.entrypoints=web"
-      - "traefik.http.routers.https-redirect.rule=HostRegexp(`{any:.*}`)"
-      - "traefik.http.routers.https-redirect.middlewares=https-redirect"
-      - "traefik.http.middlewares.https-redirect.redirectscheme.scheme=https"
 
 
     networks:
@@ -32,10 +28,6 @@ services:
       - "traefik.http.services.inputservice.loadbalancer.server.port=5000"
       - "traefik.http.routers.inputservice.entrypoints=websecure"
       - "traefik.http.routers.inputservice.tls.certresolver=myresolver"
-      - "traefik.http.routers.https-redirect.entrypoints=web"
-      - "traefik.http.routers.https-redirect.rule=HostRegexp(`{any:.*}`)"
-      - "traefik.http.routers.https-redirect.middlewares=https-redirect"
-      - "traefik.http.middlewares.https-redirect.redirectscheme.scheme=https"
 
     networks:
       - "this"
@@ -55,9 +47,6 @@ services:
       - "--certificatesresolvers.myresolver.acme.httpchallenge.entrypoint=web"
       - "--certificatesresolvers.myresolver.acme.email=squallhalle@gmail.com"
       - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
-      - "--traefik.http.routers.https-redirect.rule=HostRegexp(`{any:.*}`)"
-      - "--traefik.http.routers.https-redirect.middlewares=https-redirect"
-      - "--traefik.http.middlewares.https-redirect.redirectscheme.scheme=https"
     ports:
       - "80:80"
       - "443:443"
@@ -79,10 +68,6 @@ services:
       #- "traefik.http.routers.helloweb.rule=Host(`test.localhost`)" 
       - "traefik.http.routers.helloweb.entrypoints=websecure"
       - "traefik.http.routers.helloweb.tls.certresolver=myresolver"
-      - "traefik.http.routers.https-redirect.entrypoints=web"
-      - "traefik.http.routers.https-redirect.rule=HostRegexp(`{any:.*}`)"
-      - "traefik.http.routers.https-redirect.middlewares=https-redirect"
-      - "traefik.http.middlewares.https-redirect.redirectscheme.scheme=https"
     networks:
       - "this"
 
