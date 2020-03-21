@@ -7,8 +7,8 @@ services:
     container_name: "controlservice"
     labels:
       - "traefik.enable=true"
-      #- "traefik.http.routers.helloweb.rule=Host(`test.isolatedshopping.me`)"
-      - "traefik.http.routers.controlservice.rule=Host(`controlservice.localhost`)" 
+      - "traefik.http.routers.helloweb.rule=Host(`controlservice.isolatedshopping.me`)"
+      #- "traefik.http.routers.controlservice.rule=Host(`controlservice.localhost`)" 
       - "traefik.http.services.controlservice.loadbalancer.server.port=5000"
       - "traefik.http.routers.controlservice.entrypoints=web"
     networks:
@@ -20,8 +20,8 @@ services:
     container_name: "inputservice"
     labels:
       - "traefik.enable=true"
-      #- "traefik.http.routers.helloweb.rule=Host(`test.isolatedshopping.me`)"
-      - "traefik.http.routers.inputservice.rule=Host(`inputservice.localhost`)" 
+      - "traefik.http.routers.helloweb.rule=Host(`inputservice.isolatedshopping.me`)"
+      #- "traefik.http.routers.inputservice.rule=Host(`inputservice.localhost`)" 
       - "traefik.http.services.inputservice.loadbalancer.server.port=5000"
       - "traefik.http.routers.inputservice.entrypoints=web"
     networks:
@@ -37,12 +37,16 @@ services:
       - "--providers.docker.exposedbydefault=false"
       - "--entrypoints.web.address=:80"
       - "--entrypoints.websecure.address=:443"
+      - "--certificatesresolvers.mytlschallenge.acme.tlschallenge=true"
+      - "--certificatesresolvers.mytlschallenge.acme.email=squallhalle@gmail.com"
+      - "--certificatesresolvers.mytlschallenge.acme.storage=/letsencrypt/acme.json"
     ports:
       - "80:80"
       - "433:443"
       - "8081:8080" #NOT IN PRODUCTION PLEASE
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "./letsencrypt:/letsencrypt"
     networks:
       - "this"
 
@@ -53,9 +57,13 @@ services:
     container_name: "helloweb"
     labels:
       - "traefik.enable=true"
-      #- "traefik.http.routers.helloweb.rule=Host(`test.isolatedshopping.me`)"
-      - "traefik.http.routers.helloweb.rule=Host(`test.localhost`)" 
-      - "traefik.http.routers.helloweb.entrypoints=web"
+
+      - "traefik.http.routers.helloweb.rule=Host(`test.isolatedshopping.me`)"
+      #- "traefik.http.routers.helloweb.rule=Host(`test.localhost`)" 
+      #- "traefik.http.routers.helloweb.entrypoints=web"
+      - "traefik.http.routers.helloweb.entrypoints=websecure"
+      - "traefik.http.routers.helloweb.tls=true"
+      - "traefik.http.routers.helloweb.tls.certresolver=mytlschallenge"
     networks:
       - "this"
 
