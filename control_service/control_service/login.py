@@ -3,8 +3,8 @@ from functools import wraps
 from control_service import app
 
 
-@app.route('/Register', methods=['POST'])
-def register():
+@app.route('/Login', methods=['POST'])
+def login():
     try:
         data = request.json
 
@@ -14,7 +14,7 @@ def register():
         # @TODO: DB Client
 
         response = {}
-        response['Success'] = True
+        response['Token'] = "FancyBearerToken"
 
         return jsonify(response)
     except Exception:
