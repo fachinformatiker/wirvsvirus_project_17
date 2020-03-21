@@ -1,5 +1,8 @@
 from input_service import db
 
+"""
+Die Models entsprechend der API Beschreibung mit einer One-to-One Relation
+"""
 class Stammdaten(db.Model):
   id = db.Column(db.Integer,name='MarketID', primary_key=True)
   name = db.Column(db.String(100), name='Name', unique=True, nullable=False)
