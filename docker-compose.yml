@@ -7,7 +7,7 @@ services:
     container_name: "controlservice"
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.helloweb.rule=Host(`controlservice.isolatedshopping.me`)"
+      - "traefik.http.routers.controlservice.rule=Host(`controlservice.isolatedshopping.me`)"
       #- "traefik.http.routers.controlservice.rule=Host(`controlservice.localhost`)" 
       - "traefik.http.services.controlservice.loadbalancer.server.port=5000"
       - "traefik.http.routers.controlservice.entrypoints=web"
@@ -20,10 +20,12 @@ services:
     container_name: "inputservice"
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.helloweb.rule=Host(`inputservice.isolatedshopping.me`)"
+      - "traefik.http.routers.inputservice.rule=Host(`inputservice.isolatedshopping.me`)"
       #- "traefik.http.routers.inputservice.rule=Host(`inputservice.localhost`)" 
       - "traefik.http.services.inputservice.loadbalancer.server.port=5000"
-      - "traefik.http.routers.inputservice.entrypoints=web"
+      - "traefik.http.routers.inputservice.entrypoints=websecure"
+      - "traefik.http.routers.whoami.tls.certresolver=mytlschallenge"
+
     networks:
       - "this"
 
