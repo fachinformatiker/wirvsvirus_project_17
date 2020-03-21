@@ -7,14 +7,15 @@ services:
     container_name: "controlservice"
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.controlservice.rule=Host(`controlservice.isolatedshopping.me`)"
-      #- "traefik.http.routers.controlservice.rule=Host(`controlservice.localhost`)" 
+    #  - "traefik.http.routers.controlservice.rule=Host(`controlservice.isolatedshopping.me`)"
+    #- "traefik.http.routers.controlservice.rule=Host(`controlservice.localhost`)" 
       - "traefik.http.services.controlservice.loadbalancer.server.port=5000"
-      - "traefik.http.routers.controlservice.entrypoints=websecure"
-      - "traefik.http.routers.controlservice.tls.certresolver=myresolver"
-      - "traefik.http.routers.controlservice-redirect.rule=HostRegexp(`{any:.*}`)"
-      - "traefik.http.routers.inpcontrolserviceutservice-redirect.middlewares=controlservice-redirect"
-      - "traefik.http.middlewares.controlservice-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.controlservice.entrypoints=web"
+#      - "traefik.http.routers.controlservice.entrypoints=websecure"
+#      - "traefik.http.routers.controlservice.tls.certresolver=myresolver"
+#      - "traefik.http.routers.controlservice-redirect.rule=HostRegexp(`{any:.*}`)"
+#      - "traefik.http.routers.inpcontrolserviceutservice-redirect.middlewares=controlservice-redirect"
+#      - "traefik.http.middlewares.controlservice-redirect.redirectscheme.scheme=https"
 
 
     networks:
@@ -26,14 +27,15 @@ services:
     container_name: "inputservice"
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.inputservice.rule=Host(`inputservice.isolatedshopping.me`)"
-      #- "traefik.http.routers.inputservice.rule=Host(`inputservice.localhost`)" 
+      #- "traefik.http.routers.inputservice.rule=Host(`inputservice.isolatedshopping.me`)"
+      - "traefik.http.routers.inputservice.rule=Host(`inputservice.localhost`)" 
       - "traefik.http.services.inputservice.loadbalancer.server.port=5000"
       - "traefik.http.routers.inputservice.entrypoints=websecure"
-      - "traefik.http.routers.inputservice.tls.certresolver=myresolver"
-      - "traefik.http.routers.inputservice-redirect.rule=HostRegexp(`{any:.*}`)"
-      - "traefik.http.routers.inputservice-redirect.middlewares=inputservice-redirect"
-      - "traefik.http.middlewares.inputservice-redirect.redirectscheme.scheme=https"
+      #- "traefik.http.routers.inputservice.entrypoints=websecure"
+      #- "traefik.http.routers.inputservice.tls.certresolver=myresolver"
+      #- "traefik.http.routers.inputservice-redirect.rule=HostRegexp(`{any:.*}`)"
+      #- "traefik.http.routers.inputservice-redirect.middlewares=inputservice-redirect"
+      #- "traefik.http.middlewares.inputservice-redirect.redirectscheme.scheme=https"
       
 
     networks:
@@ -71,13 +73,14 @@ services:
     container_name: "helloweb"
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.helloweb.rule=Host(`test.isolatedshopping.me`)"
-      #- "traefik.http.routers.helloweb.rule=Host(`test.localhost`)" 
-      - "traefik.http.routers.helloweb.entrypoints=websecure"
-      - "traefik.http.routers.helloweb.tls.certresolver=myresolver"
-      - "traefik.http.routers.helloweb-redirect.rule=HostRegexp(`{any:.*}`)"
-      - "traefik.http.routers.helloweb-redirect.middlewares=helloweb-redirect"
-      - "traefik.http.middlewares.helloweb-redirect.redirectscheme.scheme=https"
+      #- "traefik.http.routers.helloweb.rule=Host(`test.isolatedshopping.me`)"
+      - "traefik.http.routers.helloweb.rule=Host(`test.localhost`)" 
+      -  "traefik.http.routers.helloweb.entrypoints=web"
+      #- "traefik.http.routers.helloweb.entrypoints=websecure"
+      #- "traefik.http.routers.helloweb.tls.certresolver=myresolver"
+      #- "traefik.http.routers.helloweb-redirect.rule=HostRegexp(`{any:.*}`)"
+      #- "traefik.http.routers.helloweb-redirect.middlewares=helloweb-redirect"
+      #- "traefik.http.middlewares.helloweb-redirect.redirectscheme.scheme=https"
     networks:
       - "this"
 
