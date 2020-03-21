@@ -48,9 +48,9 @@ services:
       - "--certificatesresolvers.myresolver.acme.email=squallhalle@gmail.com"
       - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
       ###
+      - "traefik.http.middlewares.traefik-redirectscheme.redirectscheme.scheme=https"
       - "traefik.http.routers.traefik-router0.entrypoints=web"
       - "traefik.http.routers.traefik-router0.middlewares=traefik-redirectscheme"
-      - "traefik.http.middlewares.traefik-redirectscheme.redirectscheme.scheme=https"
     ports:
       - "80:80"
       - "443:443"
@@ -72,7 +72,7 @@ services:
       #- "traefik.http.routers.helloweb.rule=Host(`test.localhost`)" 
       - "traefik.http.routers.helloweb.entrypoints=websecure"
       - "traefik.http.routers.helloweb.tls.certresolver=myresolver"
-      - " traefik.http.routers.helloweb.middlewares: redirect"
+      - "traefik.http.routers.traefik-router0.middlewares=traefik-redirectscheme"
     networks:
       - "this"
 
