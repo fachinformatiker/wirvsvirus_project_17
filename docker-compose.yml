@@ -71,6 +71,7 @@ services:
       - "traefik.http.routers.helloweb.rule=Host(`test.isolatedshopping.me`)"
       #- "traefik.http.routers.helloweb.rule=Host(`test.localhost`)" 
       - "traefik.http.routers.helloweb.entrypoints=websecure"
+      - "traefik.http.routers.helloweb.entrypoints=web"
       - "traefik.http.routers.helloweb.tls.certresolver=myresolver"
     networks:
       - "this"
