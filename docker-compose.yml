@@ -11,7 +11,6 @@ services:
       #- "traefik.http.routers.controlservice.rule=Host(`controlservice.localhost`)" 
       - "traefik.http.services.controlservice.loadbalancer.server.port=5000"
       - "traefik.http.routers.controlservice.entrypoints=websecure"
-      - "traefik.http.routers.controlservice.entrypoints=web"
       - "traefik.http.routers.controlservice.tls.certresolver=mytlschallenge"
 
     networks:
@@ -27,7 +26,6 @@ services:
       #- "traefik.http.routers.inputservice.rule=Host(`inputservice.localhost`)" 
       - "traefik.http.services.inputservice.loadbalancer.server.port=5000"
       - "traefik.http.routers.inputservice.entrypoints=websecure"
-      - "traefik.http.routers.inputservice.entrypoints=web"
       - "traefik.http.routers.inputservice.tls.certresolver=mytlschallenge"
 
     networks:
@@ -67,7 +65,6 @@ services:
 
       - "traefik.http.routers.helloweb.rule=Host(`test.isolatedshopping.me`)"
       #- "traefik.http.routers.helloweb.rule=Host(`test.localhost`)" 
-      - "traefik.http.routers.helloweb.entrypoints=web"
       - "traefik.http.routers.helloweb.entrypoints=websecure"
       - "traefik.http.routers.helloweb.tls=true"
       - "traefik.http.routers.helloweb.tls.certresolver=mytlschallenge"
