@@ -1,4 +1,5 @@
 from flask import request, abort
+import jwt
 from input_service import app, auth, db
 from input_service.models import UserData, Stammdaten
 
@@ -14,6 +15,7 @@ Die Funktion nimmt die POST Anfrage entgegen,
 überprüft ob die Daten als json vorliegen und ruft dann Authentizierung und Datenupdate auf.
 """
 @app.route('/market/status', methods=['POST'])
+#@authorize_token
 def set_market():
   if(request.is_json == True and request.method == 'POST'):
     content = request.get_json()
@@ -34,10 +36,27 @@ Paramter: market_id - ID des Marktes
 Die Funktion überprüft, ob sich der neue Status von dem alten unterscheidet und führt dann das Datenbankupdate durch.
 """
 def update_market_status(market_id, status):
-  market = Stammdaten.query.filter_by(id=market_id).first()
+  #market = Stammdaten.query.filter_by(id=market_id).first()
+  market = db.session.query(Stammdaten).filter_by(id=market_id).first()
   if(market.status != status):
     market.status = status
     db.session.commit()
     return True
   else:
     return False
+
+def authorize_token(f):
+  @wraps(f)
+  def decorated_function(*args, **kwargs):
+
+    if 'x-access-tokens' in request.headers:
+      token = request.headers['x-access-tokens']
+
+    if not token:
+      return {
+        "Error": 'token not valid'
+      }
+
+    try:
+      data = jwt.decode(token, app.config[SECRET])
+      # ...
