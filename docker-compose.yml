@@ -72,7 +72,6 @@ services:
       #- "traefik.http.routers.helloweb.rule=Host(`test.localhost`)" 
       - "traefik.http.routers.helloweb.entrypoints=websecure"
       - "traefik.http.routers.helloweb.tls.certresolver=myresolver"
-      - "traefik.http.routers.traefik-router0.middlewares=traefik-redirectscheme"
     networks:
       - "this"
 
