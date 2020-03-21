@@ -1,6 +1,7 @@
 from flask import Blueprint, jsonify, request, abort
 from functools import wraps
-from control_service import app
+from control_service import app, db
+from control_service.models import UserData
 
 
 @app.route('/GetUserProfil', methods=['POST'])
