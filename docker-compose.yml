@@ -1,12 +1,38 @@
 version: "3.7"
 services:
 
-  traefik:
+  controlservice:
+    build: 
+      context: ./control_service
+    container_name: "controlservice"
+    labels:
+      - "traefik.enable=true"
+      #- "traefik.http.routers.helloweb.rule=Host(`test.isolatedshopping.me`)"
+      - "traefik.http.routers.controlservice.rule=Host(`controlservice.localhost`)" 
+      - "traefik.http.services.controlservice.loadbalancer.server.port=5000"
+      - "traefik.http.routers.controlservice.entrypoints=web"
+    networks:
+      - "this"
+  
+  inputservice:
+    build: 
+      context: ./input_service
+    container_name: "inputservice"
+    labels:
+      - "traefik.enable=true"
+      #- "traefik.http.routers.helloweb.rule=Host(`test.isolatedshopping.me`)"
+      - "traefik.http.routers.inputservice.rule=Host(`inputservice.localhost`)" 
+      - "traefik.http.services.inputservice.loadbalancer.server.port=5000"
+      - "traefik.http.routers.inputservice.entrypoints=web"
+    networks:
+      - "this"
+
+  proxy:
     image: "traefik:v2.1"
-    container_name: "traefik"
+    container_name: "proxy"
     command:
       - "--log.level=DEBUG"
-      - "--api.insecure=true"
+      - "--api.insecure=true" #NOT IN PRODUCTION PLEASE
       - "--providers.docker=true"
       - "--providers.docker.exposedbydefault=false"
       - "--entrypoints.web.address=:80"
@@ -14,24 +40,27 @@ services:
     ports:
       - "80:80"
       - "433:443"
-      - "8081:8080"
+      - "8081:8080" #NOT IN PRODUCTION PLEASE
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
     networks:
       - "this"
 
-  webbu:
+
+### this container should help you to determinate if everything works.
+  helloweb:
     image: "nginx"
-    container_name: "wbbu"
+    container_name: "helloweb"
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.webbu.rule=Host(`test.isolatedshopping.me`)"
-      - "traefik.http.routers.webbu.entrypoints=web"
+      #- "traefik.http.routers.helloweb.rule=Host(`test.isolatedshopping.me`)"
+      - "traefik.http.routers.helloweb.rule=Host(`test.localhost`)" 
+      - "traefik.http.routers.helloweb.entrypoints=web"
     networks:
       - "this"
 
 networks:
     this:
-     name: hugo
+     name: backend
      driver: bridge
 
