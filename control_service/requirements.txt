@@ -3,3 +3,4 @@ sqlalchemy
 flask_sqlalchemy
 jwt
 schema
+Flask-Caching
