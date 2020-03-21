@@ -48,12 +48,10 @@ services:
       - "--certificatesresolvers.myresolver.acme.email=squallhalle@gmail.com"
       - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
       ###
-      - --traefik.http.middlewares.redirect.redirectregex.regex="^http://(.*)"
-      - --traefik.http.middlewares.redirect.redirectregex.replacement="https://\$1"
-      - --traefik.http.routers.web-redirect.rule="Host(\`domain.com\`)"
-      - --traefik.http.routers.web-redirect.entrypoints="web"
-      - --traefik.http.routers.web-redirect.middlewares="redirect"
-      - --traefik.http.routers.web-secure.entrypoints="websecure"
+      - traefik.http.routers.https-redirect.rule=HostRegexp(`{any:.*}`)
+      - traefik.http.routers.https-redirect.middlewares=HTTPS-REDIRECT@file
+      - traefik.http.routers.https-redirect.service=api@internal
+
     ports:
       - "80:80"
       - "443:443"
