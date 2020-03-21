@@ -1,6 +1,5 @@
 import json
 import os
-import sqlite3
 
 # Third party libraries
 from flask import Flask, redirect, request, url_for
@@ -18,8 +17,17 @@ import requests
 from auth_db import init_db_command
 from user import User
 
+
 #custom imports
 from bearer_token import Token
+from flask_sqlalchemy import SQLAlchemy
+
+#custom config
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+db = SQLAlchemy(app)
+
 
 # Configuration
 GOOGLE_CLIENT_ID = os.environ.get("GOOGLE_CLIENT_ID", None)
@@ -46,9 +54,7 @@ def unauthorized():
 # Naive database setup
 try:
     init_db_command()
-except sqlite3.OperationalError:
-    # Assume it's already been created
-    pass
+#catch error with db creation
 
 # OAuth2 client setup
 client = WebApplicationClient(GOOGLE_CLIENT_ID)

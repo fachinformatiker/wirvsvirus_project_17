@@ -12,13 +12,9 @@ class User(UserMixin):
 
     @staticmethod
     def get(user_id):
-        db = get_db()
-        user = db.execute(
-            "SELECT * FROM user WHERE id = ?", (user_id,)
-        ).fetchone()
+		user = db.session.query(User).find_by(id=user_id).first()		
         if not user:
             return None
-
         user = User(
             id_=user[0], name=user[1], email=user[2], profile_pic=user[3]
         )
@@ -26,14 +22,9 @@ class User(UserMixin):
 
     @staticmethod
     def create(id_, name, email, profile_pic):
-        db = get_db()
-        db.execute(
-            "INSERT INTO user (id, name, email, profile_pic) "
-            "VALUES (?, ?, ?, ?)",
-            (id_, name, email, profile_pic),
-        )
-        db.commit()
-
+		user = User(id, name, email, profile_pic)
+		db.session.add(user)
+		db.session.commit()
 		
 		#get,create	
 		
