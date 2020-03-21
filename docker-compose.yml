@@ -12,10 +12,6 @@ services:
       - "traefik.http.services.controlservice.loadbalancer.server.port=5000"
       - "traefik.http.routers.controlservice.entrypoints=websecure"
       - "traefik.http.routers.controlservice.tls.certresolver=myresolver"
-      - "traefik.http.routers.https-redirect.middlewares=https-redirect"
-      - "traefik.http.middlewares.https-redirect.redirectscheme.scheme=https"
-      - "traefik.http.middlewares.https-redirect.redirectscheme.port=443"
-      - "traefik.http.middlewares.https-redirect.redirectscheme.permanent=true"
 
 
     networks:
@@ -32,10 +28,6 @@ services:
       - "traefik.http.services.inputservice.loadbalancer.server.port=5000"
       - "traefik.http.routers.inputservice.entrypoints=websecure"
       - "traefik.http.routers.inputservice.tls.certresolver=myresolver"
-      - "traefik.http.routers.https-redirect.middlewares=https-redirect"
-      - "traefik.http.middlewares.https-redirect.redirectscheme.scheme=https"
-      - "traefik.http.middlewares.https-redirect.redirectscheme.port=443"
-      - "traefik.http.middlewares.https-redirect.redirectscheme.permanent=true"
 
     networks:
       - "this"
@@ -56,10 +48,10 @@ services:
       - "--certificatesresolvers.myresolver.acme.email=squallhalle@gmail.com"
       - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
     labels: 
+      - "traefik.http.routers.https-redirect.entrypoints=http"
+      - "traefik.http.routers.https-redirect.rule=HostRegexp(`{any:.*}`)"
       - "traefik.http.routers.https-redirect.middlewares=https-redirect"
       - "traefik.http.middlewares.https-redirect.redirectscheme.scheme=https"
-      - "traefik.http.middlewares.https-redirect.redirectscheme.port=443"
-      - "traefik.http.middlewares.https-redirect.redirectscheme.permanent=true"
     ports:
       - "80:80"
       - "443:443"
@@ -81,10 +73,6 @@ services:
       #- "traefik.http.routers.helloweb.rule=Host(`test.localhost`)" 
       - "traefik.http.routers.helloweb.entrypoints=websecure"
       - "traefik.http.routers.helloweb.tls.certresolver=myresolver"
-      - "traefik.http.routers.https-redirect.middlewares=https-redirect"
-      - "traefik.http.middlewares.https-redirect.redirectscheme.scheme=https"
-      - "traefik.http.middlewares.https-redirect.redirectscheme.port=443"
-      - "traefik.http.middlewares.https-redirect.redirectscheme.permanent=true"
     networks:
       - "this"
 
