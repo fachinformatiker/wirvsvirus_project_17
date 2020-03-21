@@ -5,22 +5,20 @@ from control_service import app, auth, db
 from control_service.models import UserData, Stammdaten
 
 
-@app.route('/markt/<int:id>')
+@app.route('/market/<int:id>', methods=['GET'])
 def get_market(id):
     return jsonify(db.session.query(Stammdaten).filter_by(id=id).first())
 """
-@app.route('/markt/get')
+@app.route('/market/get')
 def get_market_body():
     if(request.method == 'GET'):
         market=db.session.query(Stammdaten).filter_by(id=id).first()
         return jsonify(market)
     abort(400)
 """
-@app.route('/marktlist/')
+@app.route('/marketlist/', methods=['GET'])
 def get_marketlist():
-    if (request.method == 'GET'):
-        return jsonify(db.session.query(Stammdaten).all())
-    abort(400)
+    return jsonify(db.session.query(Stammdaten).all())
 
 
 """

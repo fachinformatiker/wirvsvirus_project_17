@@ -1,7 +1,4 @@
-from functools import wraps
 from flask import jsonify
-from flask import request, abort
-import jwt
 from control_service import app
 
 @app.route('/')
