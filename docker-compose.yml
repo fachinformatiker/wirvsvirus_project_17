@@ -11,7 +11,7 @@ services:
       #- "traefik.http.routers.controlservice.rule=Host(`controlservice.localhost`)" 
       - "traefik.http.services.controlservice.loadbalancer.server.port=5000"
       - "traefik.http.routers.controlservice.entrypoints=websecure"
-      - "traefik.http.routers.controlservice.entrypoints=web"
+      #- "traefik.http.routers.controlservice.entrypoints=web"
       - "traefik.http.routers.controlservice.tls.certresolver=myresolver"
 
     networks:
@@ -31,7 +31,7 @@ services:
       - "traefik.http.routers.inputservice.tls.certresolver=myresolver"
       # HTTPS Redirect
       - "traefik.http.routers.http-catchall.rule=hostregexp(`{host:.+}`)"
-      - "traefik.http.routers.http-catchall.entrypoints=web"
+      #- "traefik.http.routers.http-catchall.entrypoints=web"
       - "traefik.http.routers.http-catchall.middlewares=redirect-to-https@docker"
       - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
 
@@ -73,7 +73,7 @@ services:
       - "traefik.http.routers.helloweb.rule=Host(`test.isolatedshopping.me`)"
       #- "traefik.http.routers.helloweb.rule=Host(`test.localhost`)" 
       - "traefik.http.routers.helloweb.entrypoints=websecure"
-      - "traefik.http.routers.helloweb.entrypoints=web"
+      #- "traefik.http.routers.helloweb.entrypoints=web"
       - "traefik.http.routers.helloweb.tls.certresolver=myresolver"
     networks:
       - "this"
