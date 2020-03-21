@@ -31,7 +31,7 @@ class Token(db.Model):
         return []
 									 
 									 
-									 @oauth.tokengetter
+@oauth.tokengetter
 def load_token(access_token=None, refresh_token=None):
     if access_token:
         return Token.query.filter_by(access_token=access_token).first()

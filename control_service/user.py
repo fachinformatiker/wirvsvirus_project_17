@@ -49,6 +49,11 @@ class Client(db.Model):
     client_id = db.Column(db.String(40), primary_key=True)
     client_secret = db.Column(db.String(55), unique=True, index=True,
                               nullable=False)
+	
+	email = sb.Column(db.String(40), unique=True)
+	
+	#change to adress/coordinates
+	profile_pic = db.Column(db.String(40), nullable=False)
 
     # public or confidential
     is_confidential = db.Column(db.Boolean)

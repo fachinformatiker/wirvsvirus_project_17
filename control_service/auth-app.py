@@ -140,8 +140,7 @@ def callback():
         return "User email not available or not verified by Google.", 400
 
 	#todo: change to new model
-    # Create a user in our db with the information provided
-    # by Google
+    # Create a user in our db with the information provided by Google
     user = User(
         id_=unique_id, name=users_name, email=users_email, profile_pic=picture
     )
@@ -153,10 +152,16 @@ def callback():
     # Begin user session by logging the user in
     login_user(user)
 
-	#todo: send bearerToken?
-	
+
+	redirect(url_for("index"))
     # Send user back to homepage
-    return redirect(url_for("index"))
+	
+	
+	token = Token()
+	#request kann so verwendet werden?
+	bearer = savetoken(token, request, *args, **kwargs)
+	#send token?
+    return bearer
 
 
 @app.route("/logout")

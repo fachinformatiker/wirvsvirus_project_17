@@ -1,2 +1,5 @@
 flask
 sqlalchemy
+oauthlib
+pyOpenSSL
+Flask-Login
