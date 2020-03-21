@@ -1,4 +1,8 @@
 /venv/
 /.idea/
+.vscode/*
+__pycache__
+*.code-workspace
 *.sqlite
 *.sqlite3
+*.pyc
