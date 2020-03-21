@@ -18,6 +18,9 @@ import requests
 from auth_db import init_db_command
 from user import User
 
+#custom imports
+from bearer_token import Token
+
 # Configuration
 GOOGLE_CLIENT_ID = os.environ.get("GOOGLE_CLIENT_ID", None)
 GOOGLE_CLIENT_SECRET = os.environ.get("GOOGLE_CLIENT_SECRET", None)
@@ -56,9 +59,11 @@ def load_user(user_id):
     return User.get(user_id)
 
 
+'''
 @app.route("/")
 def index():
     if current_user.is_authenticated:
+		# bearer token
         return (
             "<p>Hello, {}! You're logged in! Email: {}</p>"
             "<div><p>Google Profile Picture:</p>"
@@ -69,8 +74,9 @@ def index():
         )
     else:
         return '<a class="button" href="/login">Google Login</a>'
+'''
 
-
+#todo: receive Login() request
 @app.route("/login")
 def login():
     # Find out what URL to hit for Google login
@@ -85,6 +91,7 @@ def login():
         scope=["openid", "email", "profile"],
     )
     return redirect(request_uri)
+#todo: change this? or use different function to redirect: redirect_uri=request.base_url + "/callback"
 
 
 @app.route("/login/callback")
@@ -132,6 +139,7 @@ def callback():
     else:
         return "User email not available or not verified by Google.", 400
 
+	#todo: change to new model
     # Create a user in our db with the information provided
     # by Google
     user = User(
@@ -145,6 +153,8 @@ def callback():
     # Begin user session by logging the user in
     login_user(user)
 
+	#todo: send bearerToken?
+	
     # Send user back to homepage
     return redirect(url_for("index"))
 
@@ -153,6 +163,7 @@ def callback():
 @login_required
 def logout():
     logout_user()
+
     return redirect(url_for("index"))
 
 
