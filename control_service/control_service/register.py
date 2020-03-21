@@ -15,7 +15,7 @@ def register():
         userEntity = db.session.query(UserData).filter_by(user_name == username, password == password).first()
 
         response = {}
-        if(userEntity != null):
+        if(userEntity != None):
             response['Success'] = False
             return jsonify(response)
         else:
