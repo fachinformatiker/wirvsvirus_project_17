@@ -1,3 +1,4 @@
+from functools import wraps
 from flask import request, abort
 import jwt
 from input_service import app, auth, db
@@ -15,7 +16,6 @@ Die Funktion nimmt die POST Anfrage entgegen,
 überprüft ob die Daten als json vorliegen und ruft dann Authentizierung und Datenupdate auf.
 """
 @app.route('/market/status', methods=['POST'])
-#@authorize_token
 def set_market():
   if(request.is_json == True and request.method == 'POST'):
     content = request.get_json()
@@ -35,6 +35,8 @@ Paramter: market_id - ID des Marktes
 
 Die Funktion überprüft, ob sich der neue Status von dem alten unterscheidet und führt dann das Datenbankupdate durch.
 """
+#@authorize_token
+#def update_market_status(current_user):
 def update_market_status(market_id, status):
   #market = Stammdaten.query.filter_by(id=market_id).first()
   market = db.session.query(Stammdaten).filter_by(id=market_id).first()
