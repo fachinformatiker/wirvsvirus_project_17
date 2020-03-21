@@ -2,20 +2,24 @@
 
 installieren mit `pip install -r requirements.txt`
 
-How to use our Code?
+#How to use our Code?
 
-INPUT-SERVICE Team
+##Input-Service Team
 
+```bash
 export FLASK_APP=input_service
 export FLASK_ENV=development
 
 cd input_service
 flask run
+```
 
-CONTROL-SERVICE Team
+##Control-Service Team
 
+```bash
 export FLASK_APP=control_service
 export FLASK_ENV=development
 
 cd control_service
 flask run
+```
