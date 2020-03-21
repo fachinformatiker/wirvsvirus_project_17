@@ -13,9 +13,7 @@ services:
       - "traefik.http.routers.controlservice.entrypoints=websecure"
       - "traefik.http.routers.controlservice.tls.certresolver=myresolver"
       - "traefik.http.routers.https-redirect.middlewares=https-redirect"
-      - "traefik.http.middlewares.https-redirect.redirectscheme.scheme=https"
-      - "traefik.http.middlewares.https-redirect.redirectscheme.port=443"
-      - "traefik.http.middlewares.thttps-redirect.redirectscheme.permanent=true"
+
 
 
     networks:
@@ -33,9 +31,7 @@ services:
       - "traefik.http.routers.inputservice.entrypoints=websecure"
       - "traefik.http.routers.inputservice.tls.certresolver=myresolver"
       - "traefik.http.routers.https-redirect.middlewares=https-redirect"
-      - "traefik.http.middlewares.https-redirect.redirectscheme.scheme=https"
-      - "traefik.http.middlewares.https-redirect.redirectscheme.port=443"
-      - "traefik.http.middlewares.thttps-redirect.redirectscheme.permanent=true"
+
 
     networks:
       - "this"
@@ -86,9 +82,6 @@ services:
       - "traefik.http.routers.helloweb.tls.certresolver=myresolver"
       - "traefik.http.routers.https-redirect.rule=HostRegexp(`{any:.*}`)"
       - "traefik.http.routers.https-redirect.middlewares=https-redirect"
-      - "traefik.http.middlewares.https-redirect.redirectscheme.scheme=https"
-      - "traefik.http.middlewares.https-redirect.redirectscheme.port=443"
-      - "traefik.http.middlewares.thttps-redirect.redirectscheme.permanent=true"
     networks:
       - "this"
 
