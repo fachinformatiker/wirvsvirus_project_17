@@ -9,7 +9,7 @@ class Stammdaten(db.Model):
   enabled = db.Column(db.Boolean, name='Enabled')
   super_user = db.relationship('UserData', uselist=False, backref='market')
   status = db.Column(db.Integer, name='Status')
-  timestamp = db.Column(db.DateTime, name='TimeStamp', server_default=db.func.now(), server_onupdate=db.func.now())
+  timestamp = db.Column(db.DateTime, name='TimeStamp', server_default=db.func.current_timestamp(), server_onupdate=db.func.current_timestamp())
 
 class UserData(db.Model):
   id = db.Column(db.Integer,name='UserID', primary_key=True)
