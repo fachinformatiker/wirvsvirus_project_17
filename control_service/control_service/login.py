@@ -18,6 +18,6 @@ def login():
     if(userEntity is not None):
         response['Token'] = userEntity['token']
     else:
-        abort(404)
+        abort(403)
 
     return jsonify(response)
