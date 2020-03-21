@@ -3,6 +3,6 @@ ADD requirements.txt requirements.txt
 RUN pip install -r requirements.txt
 ENV FLASK_APP input_service
 ENV FLASK_ENV development
-ADD inputservice inputservice
+ADD input_service input_service
 WORKDIR input_service
 ENTRYPOINT ["flask","run"]
