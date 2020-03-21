@@ -1,0 +1,37 @@
+version: "3.7"
+services:
+
+  traefik:
+    image: "traefik:v2.1"
+    container_name: "traefik"
+    command:
+      - "--log.level=DEBUG"
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+    ports:
+      - "80:80"
+      - "433:443"
+      - "8081:8080"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+    networks:
+      - "this"
+
+  webbu:
+    image: "nginx"
+    container_name: "wbbu"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.webbu.rule=Host(`test.isolatedshopping.me`)"
+      - "traefik.http.routers.webbu.entrypoints=web"
+    networks:
+      - "this"
+
+networks:
+    this:
+     name: hugo
+     driver: bridge
+
