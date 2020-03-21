@@ -6,6 +6,26 @@
 $ pip install -r requirements.txt
 ```
 
+### how to use our code
+
+#Input-Service Team
+
+```sh
+export FLASK_APP=input_service
+export FLASK_ENV=development
+cd input_service
+flask run
+```
+
+#Control-Service Team
+
+```sh
+export FLASK_APP=control_service
+export FLASK_ENV=development
+cd control_service
+flask run
+```
+
 ### about the project
 
 >48 Stunden. Herausforderungen der Bundesregierung und aus der Gesellschaft. Du und theoretisch 80 Millionen andere. Die Covid-19 Krise. Vielfältige Lösungen.
