@@ -51,7 +51,7 @@ services:
       - "traefik.http.routers.https-redirect.middlewares=https-redirect"
       - "traefik.http.middlewares.https-redirect.redirectscheme.scheme=https"
       - "traefik.http.middlewares.https-redirect.redirectscheme.port=443"
-      - "traefik.http.middlewares.thttps-redirect.redirectscheme.permanent=true"
+      - "traefik.http.middlewares.https-redirect.redirectscheme.permanent=true"
     ports:
       - "80:80"
       - "443:443"
