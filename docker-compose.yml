@@ -51,7 +51,7 @@ services:
       - "traefik.http.routers.traefik-router0.entrypoints=web"
       - "traefik.http.routers.traefik-router0.rule=Host(`traefik.example.tld`)"
       - "traefik.http.routers.traefik-router0.middlewares=traefik-redirectscheme,auth"
-      - "traefik.http.middlewares.traefik-redirectscheme.redirectscheme.scheme=https"
+      - "traefik.http.middlewares.traefik-redirectscheme.redirectscheme.scheme=websecure"
     ports:
       - "80:80"
       - "443:443"
