@@ -23,8 +23,11 @@ lorem ipsum
 ### links
 
 Placeholder Domain: isolatedshopping.me
+
 Wiki: https://github.com/fachinformatiker/wirvsvirus_project_17/wiki
+
 KanBan: https://github.com/fachinformatiker/wirvsvirus_project_17/projects/1
+
 Project: wirvsvirushackathon.org
 
 ### license
