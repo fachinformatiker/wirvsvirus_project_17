@@ -1,12 +1,10 @@
 from flask import Flask
+from webServices.register import register
+
 
 app = Flask(__name__)
-
-
-@app.route('/')
-def hello_world():
-    return 'Hello World!'
+app.register_blueprint(register)
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)
