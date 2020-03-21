@@ -50,7 +50,7 @@ services:
       ###
       - "traefik.http.routers.traefik-router0.entrypoints=web"
       - "traefik.http.routers.traefik-router0.middlewares=traefik-redirectscheme"
-      - "traefik.http.middlewares.traefik-redirectscheme.redirectscheme.scheme=websecure"
+      - "traefik.http.middlewares.traefik-redirectscheme.redirectscheme.scheme=https"
     ports:
       - "80:80"
       - "443:443"
