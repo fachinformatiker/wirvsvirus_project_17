@@ -55,7 +55,8 @@ services:
       - "traefik.http.routers.https-redirect.entrypoints=web"
       - "traefik.http.routers.https-redirect.rule=HostRegexp(`{any:.*}`)"
       - "traefik.http.routers.https-redirect.middlewares=https-redirect"
-      - "traefik.http.middlewares.https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.middlewares.mysite-https.redirectscheme.scheme=https"
+      - "traefik.http.routers.mysite-http.middlewares=mysite-https@docker"
     ports:
       - "80:80"
       - "443:443"
