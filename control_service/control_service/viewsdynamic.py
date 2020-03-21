@@ -3,7 +3,8 @@ from flask import request, abort, jsonify
 import jwt
 from control_service import app, auth, db
 from control_service.models import UserData, Stammdaten
-
+from control_service.schemas import SETMARKETSCHEMA
+from schema import SchemaError
 
 @app.route('/market/<int:id>', methods=['GET'])
 def get_market(id):
@@ -36,6 +37,12 @@ def set_market():
     """
     if request.is_json == True:
         content = request.get_json()  # TODO: validation
+
+        try:
+            content = SETMARKETSCHEMA.validate(content)
+        except SchemaError:
+            abort(400)
+
         success = update_market_status(content['MarketID'], content['Status'])
         return jsonify({"Success": success})
     else:
