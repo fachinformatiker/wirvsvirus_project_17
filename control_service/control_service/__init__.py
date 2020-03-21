@@ -7,6 +7,8 @@ app.config['SECRET'] = 'RemoveMeFromProduction'
 
 db = SQLAlchemy(app)
 
-@app.route('/')
-def hello_world():
-    return 'Hello World!'
+
+import control_service.models
+import control_service.views
+import control_service.viewsdynamic
+db.create_all()

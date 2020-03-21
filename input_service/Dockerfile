@@ -1,8 +1,7 @@
 FROM python:3-slim
-ADD requirements.txt requirements.txt
-RUN pip install -r requirements.txt
 ENV FLASK_APP input_service
 ENV FLASK_ENV development
-ADD input_service input_service
+COPY . /input_service/
 WORKDIR input_service
-ENTRYPOINT ["flask","run","--host 0.0.0.0"]
+RUN pip install -r requirements.txt
+ENTRYPOINT ["flask","run","--host=0.0.0.0"]

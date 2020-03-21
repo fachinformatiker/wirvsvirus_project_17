@@ -1,5 +1,5 @@
-from input_service import db
-from input_service.models import Stammdaten, UserData
+from control_service import db
+from control_service.models import Stammdaten, UserData
 
 """
 Paramter: market_id - ID des Marktes

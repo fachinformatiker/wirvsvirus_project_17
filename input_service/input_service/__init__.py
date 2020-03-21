@@ -7,5 +7,4 @@ app.config['SECRET'] = 'RemoveMeFromProduction'
 
 db = SQLAlchemy(app)
 
-import input_service.models
 import input_service.views
