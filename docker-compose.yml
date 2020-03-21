@@ -51,12 +51,11 @@ services:
       - "--certificatesresolvers.myresolver.acme.httpchallenge.entrypoint=web"
       - "--certificatesresolvers.myresolver.acme.email=squallhalle@gmail.com"
       - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
-      # HTTPS Redirect
-      - "traefik.http.routers.https-redirect.entrypoints=web"
-      - "traefik.http.routers.https-redirect.rule=HostRegexp(`{any:.*}`)"
-      - "traefik.http.routers.https-redirect.middlewares=https-redirect"
-      - "traefik.http.middlewares.mysite-https.redirectscheme.scheme=https"
-      - "traefik.http.routers.mysite-http.middlewares=mysite-https@docker"
+      ###
+      - "traefik.http.routers.traefik-router0.entrypoints=web"
+      - "traefik.http.routers.traefik-router0.rule=Host(`traefik.example.tld`)"
+      - "traefik.http.routers.traefik-router0.middlewares=traefik-redirectscheme,auth"
+      - "traefik.http.middlewares.traefik-redirectscheme.redirectscheme.scheme=https"
     ports:
       - "80:80"
       - "443:443"
