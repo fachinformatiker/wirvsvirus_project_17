@@ -17,7 +17,7 @@ class Stammdaten(db.Model):
 class UserData(db.Model):
   id = db.Column(db.Integer,name='UserID', primary_key=True)
   user_name = db.Column(db.String(20),name='UserName', unique=False, nullable=False)
-  password = db.Column(db.String(100))
+  password = db.Column(db.String(100), nullable=False)  # TODO salting and hashing
   rolle = db.Column(db.Integer, name='Rolle')
   mail = db.Column(db.String(50), name='Email')
   telefon = db.Column(db.String(20), name='Telefon')
