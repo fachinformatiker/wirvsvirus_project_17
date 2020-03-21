@@ -1,4 +1,4 @@
-from input_service import db
+from control_service import db
 
 """
 Die Models entsprechend der API Beschreibung mit einer One-to-One Relation
