@@ -1,11 +1,12 @@
 from functools import wraps
 from flask import request, abort,jsonify
 import jwt
-from control_service import app, auth, db
+from control_service import app, auth, db,cache
 from control_service.models import UserData, Stammdaten
 
 
 @app.route('/market/<int:id>', methods=['GET'])
+@cache.cached(timeout=50)
 def get_market(id):
     return jsonify(db.session.query(Stammdaten).filter_by(id=id).first())
 """
@@ -17,6 +18,7 @@ def get_market_body():
     abort(400)
 """
 @app.route('/marketlist/', methods=['GET'])
+@cache.cached(timeout=50)
 def get_marketlist():
     return jsonify(db.session.query(Stammdaten).all())
 
