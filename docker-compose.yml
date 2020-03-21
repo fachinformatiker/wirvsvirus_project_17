@@ -11,6 +11,8 @@ services:
       #- "traefik.http.routers.controlservice.rule=Host(`controlservice.localhost`)" 
       - "traefik.http.services.controlservice.loadbalancer.server.port=5000"
       - "traefik.http.routers.controlservice.entrypoints=web"
+      - "traefik.http.routers.controlservice.tls.certresolver=mytlschallenge"
+
     networks:
       - "this"
   
@@ -24,7 +26,7 @@ services:
       #- "traefik.http.routers.inputservice.rule=Host(`inputservice.localhost`)" 
       - "traefik.http.services.inputservice.loadbalancer.server.port=5000"
       - "traefik.http.routers.inputservice.entrypoints=websecure"
-      - "traefik.http.routers.whoami.tls.certresolver=mytlschallenge"
+      - "traefik.http.routers.inputservice.tls.certresolver=mytlschallenge"
 
     networks:
       - "this"
