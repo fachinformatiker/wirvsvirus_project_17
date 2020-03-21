@@ -61,4 +61,3 @@ def authorize_token(f):
 
     try:
       data = jwt.decode(token, app.config[SECRET])
-      # ...
