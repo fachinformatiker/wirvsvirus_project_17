@@ -13,6 +13,8 @@ services:
       - "traefik.http.routers.controlservice.entrypoints=websecure"
       #- "traefik.http.routers.controlservice.entrypoints=web"
       - "traefik.http.routers.controlservice.tls.certresolver=myresolver"
+      - "traefik.http.routers.controlservice.middlewares: websecure"
+
 
     networks:
       - "this"
@@ -29,6 +31,7 @@ services:
       - "traefik.http.routers.inputservice.entrypoints=websecure"
       #- "traefik.http.routers.inputservice.entrypoints=web"
       - "traefik.http.routers.inputservice.tls.certresolver=myresolver"
+      - " traefik.http.routers.inputservice.middlewares: redirect"
 
     networks:
       - "this"
@@ -49,10 +52,10 @@ services:
       - "--certificatesresolvers.myresolver.acme.email=squallhalle@gmail.com"
       - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
       # HTTPS Redirect
-      - "traefik.http.routers.http-catchall.rule=hostregexp(`{host:.+}`)"
-      - "traefik.http.routers.http-catchall.entrypoints=web"
-      - "traefik.http.routers.http-catchall.middlewares=redirect-to-https@docker"
-      - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
+      - "traefik.http.routers.https-redirect.entrypoints=web"
+      - "traefik.http.routers.https-redirect.rule=HostRegexp(`{any:.*}`)"
+      - "traefik.http.routers.https-redirect.middlewares=https-redirect"
+      - "traefik.http.middlewares.https-redirect.redirectscheme.scheme=websecure"
     ports:
       - "80:80"
       - "443:443"
@@ -75,6 +78,7 @@ services:
       - "traefik.http.routers.helloweb.entrypoints=websecure"
       #- "traefik.http.routers.helloweb.entrypoints=web"
       - "traefik.http.routers.helloweb.tls.certresolver=myresolver"
+      - " traefik.http.routers.helloweb.middlewares: redirect"
     networks:
       - "this"
 
