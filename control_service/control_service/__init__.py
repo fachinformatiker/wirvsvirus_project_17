@@ -4,7 +4,11 @@ from flask_caching import Cache
 import os
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['CONNECTION_STRING']
+conn_string=os.environ.get("CONNECTION_STRING")
+
+if conn_string is None:
+    conn_string="sqlite:////tmp/test.db"
+app.config['SQLALCHEMY_DATABASE_URI'] =conn_string
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 cache = Cache(app,config={'CACHE_TYPE': "simple"}) #disabled
 
