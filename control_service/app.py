@@ -25,39 +25,12 @@ app.secret_key = os.environ.get("SECRET_KEY") or os.urandom(24)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-
-def get_db():
-    if "db" not in g:
-        g.db = SQLAlchemy(app)
-    return g.db
-
-def close_db(e=None):
-    db = g.pop("db", None)
-
-    if db is not None:
-        db.close()
-
-def init_db():
-    db = get_db()
-	
-	# Internal imports
+# Internal imports
 #from user import User
 
 
 #custom imports
 #from bearer_token import Token
-
-
-@click.command("init-db")
-@with_appcontext
-def init_db_command():
-    """Clear the existing data and create new tables."""
-    init_db()
-    click.echo("Initialized the database.")
-
-def init_app(app):
-    app.teardown_appcontext(close_db)
-    app.cli.add_command(init_db_command)
 
 
 # Configuration
