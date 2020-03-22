@@ -4,19 +4,24 @@
 # http://flask.pocoo.org/docs/1.0/tutorial/database/
 
 import click
+import os
+from flask import Flask, redirect, request, url_for
+
 from flask import current_app, g
 from flask.cli import with_appcontext
+
+from flask_sqlalchemy import SQLAlchemy
 
 
 def get_db():
 	if "db" not in g:
-		g.db = SQLAlchemy(app)
+		g.db = SQLAlchemy()
 	return g.db
 
 def close_db(e=None):
 	db = g.pop("db", None)
 
-    if db is not None:
+	if db is not None:
 		db.close()
 
 def init_db():

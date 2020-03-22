@@ -15,23 +15,20 @@ from oauthlib.oauth2 import WebApplicationClient
 import requests
 from flask_sqlalchemy import SQLAlchemy
 from flask.cli import with_appcontext
+from auth_db import init_db_command
+#from user import User, init_user_func
 
+
+from flask_login import UserMixin
 
 # Flask app setup
+
 app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY") or os.urandom(24)
 
 #custom config
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
-# Internal imports
-#from user import User
-
-
-#custom imports
-#from bearer_token import Token
-
 
 # Configuration
 GOOGLE_CLIENT_ID = os.environ.get("GOOGLE_CLIENT_ID", None)
@@ -40,6 +37,7 @@ GOOGLE_DISCOVERY_URL = (
 	"https://accounts.google.com/.well-known/openid-configuration"
 )
 
+#init_user_func()
 
 # User session management setup
 # https://flask-login.readthedocs.io/en/latest
@@ -53,10 +51,10 @@ def unauthorized():
 
 
 # Naive database setup
-#try:
-init_db_command()
-	#except 
-	#	pass
+try:
+	init_db_command()
+except:
+		pass
 #catch error with db creation
 
 # OAuth2 client setup
@@ -150,9 +148,8 @@ def callback():
 
 	#todo: change to new model
     # Create a user in our db with the information provided by Google
-	user = User(
-		id_=unique_id, name=users_name, email=users_email, profile_pic=picture
-	)
+	user = User(id=unique_id, name=users_name, email=users_email, profile_pic=picture)
+	#user = temp_user.create(id_=unique_id, name=users_name, email=users_email, profile_pic=picture)
 
     # Doesn't exist? Add to database
 	if not User.get(unique_id):
@@ -189,142 +186,3 @@ if __name__ == "__main__":
 	app.run(ssl_context="adhoc")
 	
 	
-#todo replace pic with adress or equivalent
-class User(UserMixin):
-	def __init__(self, id_, name, email, profile_pic):
-		self.id = id_
-		self.name = name
-		self.email = email
-		self.profile_pic = profile_pic
-
-	@staticmethod
-	def get(user_id):
-		user = db.query(User).filter_by(id==user_id).first()		
-		if user == None:
-				return None
-		user = User(
-			id_=user[0], name=user[1], email=user[2], profile_pic=user[3]
-		)
-		return user
-
-	@staticmethod
-	def create(id_, name, email, profile_pic):
-		user = User(id, name, email, profile_pic)
-		db.session.add(user)
-		db.session.commit()
-		
-class Client(db.Model):
-    # human readable name, not required
-	name = db.Column(db.String(40))
-
-    # creator of the client, not required
-	user_id = db.Column(db.ForeignKey('user.id'))
-    # required if you need to support client credential
-	user = db.relationship('User')
-
-	client_id = db.Column(db.String(40), primary_key=True)
-	client_secret = db.Column(db.String(55), unique=True, index=True,
-			nullable=False)
-
-	email = sb.Column(db.String(40), unique=True)
-	
-	#change to adress/coordinates
-	profile_pic = db.Column(db.String(40), nullable=False)
-
-    # public or confidential
-	is_confidential = db.Column(db.Boolean)
-
-	_redirect_uris = db.Column(db.Text)
-	_default_scopes = db.Column(db.Text)
-
-	@property
-	def client_type(self):
-		if self.is_confidential:
-			return 'confidential'
-		return 'public'
-
-	@property
-	def redirect_uris(self):
-		if self._redirect_uris:
-			return self._redirect_uris.split()
-		return []
-
-	@property
-	def default_redirect_uri(self):
-		return self.redirect_uris[0]
-
-	@property
-	def default_scopes(self):
-		if self._default_scopes:
-			return self._default_scopes.split()
-		return []
-	
-	
-from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
-
-class Token(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    client_id = db.Column(
-        db.String(40), db.ForeignKey('client.client_id'),
-        nullable=False,
-    )
-    client = db.relationship('Client')
-
-    user_id = db.Column(
-        db.Integer, db.ForeignKey('user.id')
-    )
-    user = db.relationship('User')
-
-    # currently only bearer is supported
-    token_type = db.Column(db.String(40))
-
-    access_token = db.Column(db.String(255), unique=True)
-    refresh_token = db.Column(db.String(255), unique=True)
-    expires = db.Column(db.DateTime)
-    _scopes = db.Column(db.Text)
-
-    def delete(self):
-        db.session.delete(self)
-        db.session.commit()
-        return self
-
-    @property
-    def scopes(self):
-        if self._scopes:
-            return self._scopes.split()
-        return []
-									 
-									 
-@oauth.tokengetter
-def load_token(access_token=None, refresh_token=None):
-    if access_token:
-        return Token.query.filter_by(access_token=access_token).first()
-    elif refresh_token:
-        return Token.query.filter_by(refresh_token=refresh_token).first()
-
-from datetime import datetime, timedelta
-
-@oauth.tokensetter
-def save_token(token, request, *args, **kwargs):
-    toks = Token.query.filter_by(client_id=request.client.client_id,
-                                 user_id=request.user.id)
-    # make sure that every client has only one token connected to a user
-    for t in toks:
-        db.session.delete(t)
-
-    expires_in = token.get('expires_in')
-    expires = datetime.utcnow() + timedelta(seconds=expires_in)
-
-    tok = Token(
-        access_token=token['access_token'],
-        refresh_token=token['refresh_token'],
-        token_type=token['token_type'],
-        _scopes=token['scope'],
-        expires=expires,
-        client_id=request.client.client_id,
-        user_id=request.user.id,
-    )
-    db.session.add(tok)
-    db.session.commit()
-    return tok
