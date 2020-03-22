@@ -1,11 +1,12 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_caching import Cache
+import os
 
 app = Flask(__name__)
-#app.config.from_envvar('CONTROL_SERVICE_SETTINGS')
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['CONNECTION_STRING']
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-cache = Cache(app,config={'CACHE_TYPE': 'null'}) #disabled
+cache = Cache(app,config={'CACHE_TYPE': "simple"}) #disabled
 
 db = SQLAlchemy(app)
 
