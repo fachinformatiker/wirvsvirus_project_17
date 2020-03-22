@@ -18,9 +18,9 @@ class Stammdaten(db.Model):
 class UserData(db.Model):
   id = db.Column(db.Integer,name='UserID', primary_key=True)
   user_name = db.Column(db.String(20),name='UserName', unique=False, nullable=False)
-  password = db.Column(db.String(100))
+  password = db.Column(db.String(94), nullable=False)
   rolle = db.Column(db.Integer, name='Rolle')
   mail = db.Column(db.String(50), name='Email')
   telefon = db.Column(db.String(20), name='Telefon')
   market_id = db.Column(db.Integer, db.ForeignKey('stammdaten.MarketID'))
-  token = db.Column(db.String(64), name='BearerToken', unique=True)
+  token = db.Column(db.String(43), name='BearerToken', unique=True, nullable=False)
