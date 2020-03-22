@@ -57,15 +57,19 @@ def create_market():
     Methods:  POST
     Parameter:
     """
-    if request.is_json == True:
+    print(request.is_json)
+    if request.is_json:
+        print("sucess")
         content = request.get_json()  # TODO: validation
+        print("hi")
         """
         try:
             content = SETMARKETSCHEMA.validate(content)
         except SchemaError:
             abort(400)
         """
-        success = create_market_entity(content['MarketID'], content['name'],content["company"],content["lat"],content["long"],content["enabled"],content["status"])
+        print(content)
+        success = create_market_entity(content['MarketID'], content['Name'],content["Company"],content["GPSLocation"]["Lat"],content["GPSLocation"]["Long"],content["Enabled"],content["Status"])
         return jsonify({"Success": success})
     else:
         abort(400)
@@ -87,6 +91,8 @@ def update_market_status(market_id, status):
     return True
 
 def create_market_entity(market_id,name,company,lat,long,enabled,status):
+    Stammdaten()
+    print(market_id,name,company,lat,long,enabled,status)
     market = Stammdaten(market_id, name, company, lat, long, enabled, status)
     if market == None:
         return False
