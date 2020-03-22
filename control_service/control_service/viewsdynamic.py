@@ -93,8 +93,6 @@ def update_market_status(market_id, status):
 def create_market_entity(market_id,name,company,lat,long,adress,enabled,status):
     print(market_id,name,company,lat,long,enabled,status)
     market = Stammdaten(id=market_id, name=name, company=company, lat=lat, long=long,adresse=adress, enabled=enabled, status=status)
-    if market == None:
-        return False
 
     db.session.add(market)
     db.session.commit()
