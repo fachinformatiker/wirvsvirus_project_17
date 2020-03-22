@@ -24,6 +24,11 @@ def handle_market_status_change():
   
   status_update_response = status_update_request.json()
 
+  if 'Success' not in status_update_response:
+    return {
+      "Success": False
+    }
+    
   return {
     "Success": status_update_response['Success']
   }
