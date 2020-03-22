@@ -3,9 +3,8 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_caching import Cache
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test.db'
+#app.config.from_envvar('CONTROL_SERVICE_SETTINGS')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SECRET'] = 'RemoveMeFromProduction'
 cache = Cache(app,config={'CACHE_TYPE': 'null'}) #disabled
 
 db = SQLAlchemy(app)

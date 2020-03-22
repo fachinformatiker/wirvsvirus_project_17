@@ -42,6 +42,32 @@ def set_market():
     return jsonify({"Success": success})
 
 
+
+@app.route('/market/', methods=['POST'])
+def create_market():
+    """
+    Endpoint: /market/
+    Methods:  POST
+    Parameter:
+    """
+    print(request.is_json)
+    if request.is_json:
+        print("sucess")
+        content = request.get_json()  # TODO: validation
+        print("hi")
+        """
+        try:
+            content = SETMARKETSCHEMA.validate(content)
+        except SchemaError:
+            abort(400)
+        """
+        print(content)
+        success = create_market_entity(content['MarketID'], content['Name'],content["Company"],content["GPSLocation"]["Lat"],content["GPSLocation"]["Long"],content["Adresse"],content["Enabled"],content["Status"])
+        return jsonify({"Success": success})
+    else:
+        abort(400)
+
+
 def update_market_status(market_id, status):
     """
     :param market_id: market_id - id of the market
@@ -55,5 +81,13 @@ def update_market_status(market_id, status):
         return False
 
     market.status = status
+    db.session.commit()
+    return True
+
+def create_market_entity(market_id,name,company,lat,long,adress,enabled,status):
+    print(market_id,name,company,lat,long,enabled,status)
+    market = Stammdaten(id=market_id, name=name, company=company, lat=lat, long=long,adresse=adress, enabled=enabled, status=status)
+
+    db.session.add(market)
     db.session.commit()
     return True
