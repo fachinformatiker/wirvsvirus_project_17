@@ -1,3 +1,6 @@
+from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
+
 class Token(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     client_id = db.Column(
