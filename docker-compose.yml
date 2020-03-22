@@ -2,7 +2,8 @@ version: "3.7"
 services:
 
   controlservice:
-    image: wirvsvirus17livetracking/controlservice
+    build: 
+      context: ./control_service/
     container_name: "controlservice"
     labels:
       - "traefik.enable=true"
@@ -13,7 +14,8 @@ services:
       - "this"
   
   inputservice:
-    image: wirvsvirus17livetracking/inputservice:dev
+    build: 
+      context: ./input_service
     container_name: "inputservice"
     labels:
       - "traefik.enable=true"
@@ -24,14 +26,14 @@ services:
       - "this"
 
   client:
-      image: niewview/supermarket_clientapp
-      container_name: "client"
-      labels:
-        - "traefik.enable=true"
-        - "traefik.http.routers.client.entrypoints=web"
-        - "traefik.http.routers.client.rule=Host(`localhost`)"
-      networks:
-        - "this"
+    image: niewview/supermarket_clientapp
+    container_name: "client"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.client.entrypoints=web"
+      - "traefik.http.routers.client.rule=Host(`localhost`)"
+    networks:
+      - "this"
 
 
   proxy:
