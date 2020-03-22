@@ -5,7 +5,7 @@ def market_to_obj(market: Stammdaten):
     if market == None:
         return None
 
-    market_obj = {
+    return {
         "MarketID": market.id,
         "Name": market.name,
         "Company": market.company,
@@ -17,5 +17,4 @@ def market_to_obj(market: Stammdaten):
         "Adresse": market.adresse,
         "Status": market.status,
         "TimeStamp": market.timestamp.isoformat()
-
     }
