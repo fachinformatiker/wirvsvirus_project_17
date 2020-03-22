@@ -2,5 +2,4 @@ flask
 sqlalchemy
 flask_sqlalchemy
 Flask-Caching
-jwt
 requests
