@@ -1,29 +1,24 @@
 from functools import wraps
 from flask import request, abort, jsonify
 import jwt
-from control_service import app, auth, db,cache
+from control_service import app, auth, db, cache
 from control_service.models import UserData, Stammdaten
 from control_service.schemas import SETMARKETSCHEMA, get_validated_json
+from control_service.jsonhelper import market_to_obj
 
 
 @app.route('/market/<int:id>', methods=['GET'])
 @cache.cached(timeout=50)
 def get_market(id):
-    return jsonify(db.session.query(Stammdaten).filter_by(id=id).first())
+    market = db.session.query(Stammdaten).filter_by(id=id).first()
+    return jsonify(market_to_obj(market))
 
 
-"""
-@app.route('/market/get')
-def get_market_body():
-    if(request.method == 'GET'):
-        market=db.session.query(Stammdaten).filter_by(id=id).first()
-        return jsonify(market)
-    abort(400)
-"""
 @app.route('/marketlist/', methods=['GET'])
 @cache.cached(timeout=50)
 def get_marketlist():
-    return jsonify(db.session.query(Stammdaten).all())
+    markets = [market_to_obj(market) for market in db.session.query(Stammdaten).all()]
+    return jsonify(markets)
 
 
 @app.route('/market/', methods=['PUT'])
@@ -40,7 +35,6 @@ def set_market():
     content = get_validated_json(SETMARKETSCHEMA)
     success = update_market_status(content['MarketID'], content['Status'])
     return jsonify({"Success": success})
-
 
 
 @app.route('/market/', methods=['POST'])
@@ -62,7 +56,8 @@ def create_market():
             abort(400)
         """
         print(content)
-        success = create_market_entity(content['MarketID'], content['Name'],content["Company"],content["GPSLocation"]["Lat"],content["GPSLocation"]["Long"],content["Adresse"],content["Enabled"],content["Status"])
+        success = create_market_entity(content['MarketID'], content['Name'], content["Company"], content["GPSLocation"]
+                                       ["Lat"], content["GPSLocation"]["Long"], content["Adresse"], content["Enabled"], content["Status"])
         return jsonify({"Success": success})
     else:
         abort(400)
@@ -84,9 +79,11 @@ def update_market_status(market_id, status):
     db.session.commit()
     return True
 
-def create_market_entity(market_id,name,company,lat,long,adress,enabled,status):
-    print(market_id,name,company,lat,long,enabled,status)
-    market = Stammdaten(id=market_id, name=name, company=company, lat=lat, long=long,adresse=adress, enabled=enabled, status=status)
+
+def create_market_entity(market_id, name, company, lat, long, adress, enabled, status):
+    print(market_id, name, company, lat, long, enabled, status)
+    market = Stammdaten(id=market_id, name=name, company=company, lat=lat,
+                        long=long, adresse=adress, enabled=enabled, status=status)
 
     db.session.add(market)
     db.session.commit()
