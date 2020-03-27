@@ -54,23 +54,32 @@ namespace SicherEinkaufenBackend.Controllers
             return Ok();
         }
 
-
+        /// <summary>
+        /// Creats new Market 
+        /// </summary>
+        /// <param name="market"></param>
+        /// <returns></returns>
         [HttpPost]
         [Produces("application/json")]
-        [ProducesResponseType(typeof(User), 200)]
+        [ProducesResponseType(typeof(bool), 200)]
 
-        public async Task<IActionResult> Post()
+        public async Task<IActionResult> CreateMarket(Market market)
         {
-            return Ok();
+            return Ok(true);
         }
 
+        /// <summary>
+        /// Sets Status of a Market
+        /// </summary>
+        /// <param name="marketStatusBody"></param>
+        /// <returns></returns>
         [HttpPut]
         [Produces("application/json")]
-        [ProducesResponseType(typeof(User), 200)]
+        [ProducesResponseType(typeof(bool), 200)]
 
-        public async Task<IActionResult> Put()
+        public async Task<IActionResult> SetMarketStatus(MarketStatusBody marketStatusBody)
         {
-            return Ok();
+            return Ok(true);
         }
     }
 }
