@@ -1,7 +1,0 @@
-flask
-werkzeug
-sqlalchemy
-flask_sqlalchemy
-jwt
-schema
-Flask-Caching
