@@ -5,3 +5,4 @@ flask_sqlalchemy
 jwt
 schema
 Flask-Caching
+psycopg2
