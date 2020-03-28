@@ -1,82 +1,90 @@
 from functools import wraps
-from flask import request, abort,jsonify
+from flask import request, abort, jsonify
 import jwt
-from control_service import app, auth, db
+from control_service import app, auth, db, cache
 from control_service.models import UserData, Stammdaten
+from control_service.schemas import SETMARKETSCHEMA, get_validated_json
+from control_service.jsonhelper import market_to_obj
 
 
 @app.route('/market/<int:id>', methods=['GET'])
+@cache.cached(timeout=50)
 def get_market(id):
-    return jsonify(db.session.query(Stammdaten).filter_by(id=id).first())
-"""
-@app.route('/market/get')
-def get_market_body():
-    if(request.method == 'GET'):
-        market=db.session.query(Stammdaten).filter_by(id=id).first()
-        return jsonify(market)
-    abort(400)
-"""
+    market = db.session.query(Stammdaten).filter_by(id=id).first()
+    return jsonify(market_to_obj(market))
+
+
 @app.route('/marketlist/', methods=['GET'])
+@cache.cached(timeout=50)
 def get_marketlist():
-    return jsonify(db.session.query(Stammdaten).all())
+    markets = [market_to_obj(market) for market in db.session.query(Stammdaten).all()]
+    return jsonify(markets)
 
 
-"""
-Endpoint: /market/status
-Methods: POST
-Parameter: MarketID - ID des Marktes
-           Token - Bearer Token des Users welcher als super_user des Marktes eingetragen ist
-           Status - der Status
-
-Die Funktion nimmt die POST Anfrage entgegen, 
-überprüft ob die Daten als json vorliegen und ruft dann Authentizierung und Datenupdate auf.
-"""
-
-
-@app.route('/market/status', methods=['POST'])
+@app.route('/market/', methods=['PUT'])
 def set_market():
-    if (request.is_json == True and request.method == 'POST'):
-        content = request.get_json()
-        if (auth.validate_auth_token(content['MarketID'], content['Token'])):
-            success = update_market_status(content['MarketID'], content['Status'])
-            return {
-                "Success": success
-            }
-        else:
+    """
+    Endpoint: /market/
+    Methods:  PUT
+    Parameter: MarketID - id of the market
+               Status   - the Status the status of the market should change to
+
+    The function takes a json object with the key/value pairs descripted by Parameters and 
+    initiates the corresponding db change.
+    """
+    content = get_validated_json(SETMARKETSCHEMA)
+    success = update_market_status(content['MarketID'], content['Status'])
+    return jsonify({"Success": success})
+
+
+@app.route('/market/', methods=['POST'])
+def create_market():
+    """
+    Endpoint: /market/
+    Methods:  POST
+    Parameter:
+    """
+    print(request.is_json)
+    if request.is_json:
+        print("sucess")
+        content = request.get_json()  # TODO: validation
+        print("hi")
+        """
+        try:
+            content = SETMARKETSCHEMA.validate(content)
+        except SchemaError:
             abort(400)
+        """
+        print(content)
+        success = create_market_entity(content['MarketID'], content['Name'], content["Company"], content["GPSLocation"]
+                                       ["Lat"], content["GPSLocation"]["Long"], content["Adresse"], content["Enabled"], content["Status"])
+        return jsonify({"Success": success})
     else:
         abort(400)
 
 
-"""
-Paramter: market_id - ID des Marktes
-          status - der neue Status
-
-Die Funktion überprüft, ob sich der neue Status von dem alten unterscheidet und führt dann das Datenbankupdate durch.
-"""
-
-
-# @authorize_token
-# def update_market_status(current_user):
 def update_market_status(market_id, status):
-    # market = Stammdaten.query.filter_by(id=market_id).first()
+    """
+    :param market_id: market_id - id of the market
+                      status    - the Status the status of the market should change to
+
+    This function updated the status of the market in the db. The timestamp is automatically updated.
+    """
     market = db.session.query(Stammdaten).filter_by(id=market_id).first()
-    if (market.status != status):
-        market.status = status
-        db.session.commit()
-        return True
-    else:
+
+    if market == None:
         return False
 
+    market.status = status
+    db.session.commit()
+    return True
 
-def authorize_token(f):
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
 
-        if 'x-access-tokens' in request.headers:
-            token = request.headers['x-access-tokens']
+def create_market_entity(market_id, name, company, lat, long, adress, enabled, status):
+    print(market_id, name, company, lat, long, enabled, status)
+    market = Stammdaten(id=market_id, name=name, company=company, lat=lat,
+                        long=long, adresse=adress, enabled=enabled, status=status)
 
-        if not token:
-            return {
-                "Error": 'token not valid'
-            }
+    db.session.add(market)
+    db.session.commit()
+    return True

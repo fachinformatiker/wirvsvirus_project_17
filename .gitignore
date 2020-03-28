@@ -1,3 +1,4 @@
+/letsencrypt/acme.json
 /venv/
 /.idea/
 .vscode/*
@@ -6,3 +7,5 @@ __pycache__
 *.sqlite
 *.sqlite3
 *.pyc
+/Supermarkt_LiveTracker
+docker-compose.override.yml

@@ -1,4 +1,5 @@
 flask
 sqlalchemy
 flask_sqlalchemy
-jwt
+Flask-Caching
+requests
