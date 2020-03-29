@@ -9,3 +9,4 @@ __pycache__
 *.pyc
 /Supermarkt_LiveTracker
 docker-compose.override.yml
+.ropeproject

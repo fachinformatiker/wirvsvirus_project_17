@@ -1,24 +1,29 @@
 from functools import wraps
-from flask import request, abort, jsonify
-import jwt
-from control_service import app, auth, db, cache
-from control_service.models import UserData, Stammdaten
-from control_service.schemas import SETMARKETSCHEMA, get_validated_json
-from control_service.jsonhelper import market_to_obj
+from typing import List
+#from flask import request, abort, jsonify
+#import jwt
+#from control_service import app, auth, db, cache
+from control_service import app, database
+from control_service.models import UserData, Stammdaten, sql_userdata, sql_stammdaten
 
 
-@app.route('/market/<int:id>', methods=['GET'])
-@cache.cached(timeout=50)
+
+@app.get('/market/<int:id>', response_model=Stammdaten)
 def get_market(id):
-    market = db.session.query(Stammdaten).filter_by(id=id).first()
-    return jsonify(market_to_obj(market))
+    """
+    Endpoint: /market/
+    Methods:  GET
+    Parameter: MarketID - id of the market
+
+    """
+    query=sql_stammdaten.filter_by(id=id)
+    return await database.fetch_one()
 
 
-@app.route('/marketlist/', methods=['GET'])
-@cache.cached(timeout=50)
+@app.get('/marketlist/', response_model=List[Stammdaten])
 def get_marketlist():
-    markets = [market_to_obj(market) for market in db.session.query(Stammdaten).all()]
-    return jsonify(markets)
+    query = sql_stammdaten.query(Stammdaten).all()
+    return await database.fetch_all(query)
 
 
 @app.route('/market/', methods=['PUT'])
@@ -29,7 +34,7 @@ def set_market():
     Parameter: MarketID - id of the market
                Status   - the Status the status of the market should change to
 
-    The function takes a json object with the key/value pairs descripted by Parameters and 
+    The function takes a json object with the key/value pairs descripted by Parameters and
     initiates the corresponding db change.
     """
     content = get_validated_json(SETMARKETSCHEMA)
