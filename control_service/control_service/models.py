@@ -2,7 +2,8 @@ import databases
 import sqlalchemy
 from pydantic import BaseModel
 from datetime import datetime
-SQLALCHEMY_DATABASE_URI="sqlite:///./test.db"
+import os
+SQLALCHEMY_DATABASE_URI=os.environ.get("CONNECTION_STRING","sqlite:////./test.db")
 """
 Die Models entsprechend der API Beschreibung mit einer One-to-One Relation
 """
