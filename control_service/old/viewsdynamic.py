@@ -21,8 +21,18 @@ def get_market(id):
 
 
 @app.get('/marketlist/', response_model=List[Stammdaten])
-def get_marketlist():
-    query = sql_stammdaten.query(Stammdaten).all()
+def get_marketlist(x, y, width, heigth):
+    """
+    Endpoint: /marketlist/
+    Methods:  GET
+    Parameter:  x       - x coordinate bottom left
+                y       - x coordinate bottom left
+                width   - screen width
+                heigth  - screen heigth
+
+    """
+    query = sql_stammdaten.filter(lat >= x, lat < x+width, long >= y, long < y+heigth)
+    #query = sql_stammdaten.query(Stammdaten).all()
     return await database.fetch_all(query)
 
 
