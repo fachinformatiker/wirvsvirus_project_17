@@ -38,9 +38,13 @@ class Stammdaten(BaseModel):
     lat: float
     long: float
     Adresse: str
-    Enabled: bool
+    Enabled: bool = False
+    Status: int = None
+    TimeStamp: datetime = None
+
+class Market_status(BaseModel):
+    MarketID: int
     Status: int
-    TimeStamp: datetime
 
 #sqlalchemy.Column('MarketID', sqlalchemy.Integer,sqlalchemy.ForeignKey('stammdaten.MarketID')),
 sql_userdata = sqlalchemy.Table(
