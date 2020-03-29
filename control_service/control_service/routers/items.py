@@ -1,12 +1,7 @@
 from fastapi import APIRouter
-from functools import wraps
 from typing import List
-from control_service.models import UserData, Stammdaten, sql_userdata, sql_stammdaten,database, Market_status
-#from control_service.schemas import SETMARKETSCHEMA, get_validated_json
-from control_service.jsonhelper import market_to_obj
-# from flask import request, abort, jsonify
-# import jwt
-# from control_service import app, auth, db, cache
+from control_service.models import  Stammdaten, sql_stammdaten,database, Market_status
+
 
 router = APIRouter()
 

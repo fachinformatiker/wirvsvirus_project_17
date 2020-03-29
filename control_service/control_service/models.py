@@ -57,7 +57,7 @@ sql_userdata = sqlalchemy.Table(
     sqlalchemy.Column( 'Email',sqlalchemy.String(50)),
     sqlalchemy.Column( 'Telefon',sqlalchemy.String(20)),
     sqlalchemy.Column( 'BearerToken',sqlalchemy.String(43), unique=True),
-    sqlalchemy.Column( 'Enabled',sqlalchemy.Boolean)
+    sqlalchemy.Column( 'Enabled',sqlalchemy.Boolean,default=False)
   )
 
 class UserData(BaseModel):
@@ -67,7 +67,25 @@ class UserData(BaseModel):
     Email: str
     Telefon: str
     BearerToken: str
-    Enabled: bool
+    Enabled: bool=False
+
+class RegisterUser(BaseModel):
+    UserName: str
+    password: str
+    Email: str
+    Telefon: str
+
+class UserInDB(UserData):
+    hashed_password: str
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+
+
+class TokenData(BaseModel):
+    username: str = None
+
 
 
 

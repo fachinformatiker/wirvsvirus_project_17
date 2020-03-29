@@ -4,3 +4,6 @@ fastapi
 databases
 uvicorn
 aiosqlite
+passlib[bcrypt]
+python-multipart
+pyjwt
