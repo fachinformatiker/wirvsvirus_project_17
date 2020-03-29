@@ -1,7 +1,7 @@
-from fastapi import APIRouter
+from fastapi import APIRouter,Depends
 from typing import List
-from control_service.models import  Stammdaten, sql_stammdaten,database, Market_status
-
+from control_service.models import  Stammdaten, sql_stammdaten,database, Market_status,UserData
+from control_service.routers.users import get_current_active_user
 
 router = APIRouter()
 
@@ -62,7 +62,7 @@ async def set_market(status: Market_status):
 
 
 @router.post('/market/')
-async def create_market(item: Stammdaten):
+async def create_market(item: Stammdaten,current_user: UserData = Depends(get_current_active_user)):
     """
     Endpoint: /market/
     Methods:  POST
