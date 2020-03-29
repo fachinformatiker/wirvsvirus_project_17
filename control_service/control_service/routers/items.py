@@ -50,7 +50,7 @@ async def get_marketlist():
     return await database.fetch_all(query)
 
 
-@router.put('/market/', methods=['PUT'])
+@router.put('/market/')
 def set_market():
     """
     Endpoint: /market/
@@ -66,7 +66,7 @@ def set_market():
     return {"Success": success}
 
 
-@router.put('/market/', methods=['POST'])
+@router.post('/market/')
 def create_market():
     """
     Endpoint: /market/
