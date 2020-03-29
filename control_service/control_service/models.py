@@ -56,7 +56,8 @@ sql_userdata = sqlalchemy.Table(
     sqlalchemy.Column( 'Rolle',sqlalchemy.Integer),
     sqlalchemy.Column( 'Email',sqlalchemy.String(50)),
     sqlalchemy.Column( 'Telefon',sqlalchemy.String(20)),
-    sqlalchemy.Column( 'BearerToken',sqlalchemy.String(43), unique=True)
+    sqlalchemy.Column( 'BearerToken',sqlalchemy.String(43), unique=True),
+    sqlalchemy.Column( 'Enabled',sqlalchemy.Boolean)
   )
 
 class UserData(BaseModel):
@@ -66,6 +67,7 @@ class UserData(BaseModel):
     Email: str
     Telefon: str
     BearerToken: str
+    Enabled: bool
 
 
 
