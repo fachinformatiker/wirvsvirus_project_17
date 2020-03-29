@@ -1,8 +1,7 @@
 from fastapi import APIRouter
 from functools import wraps
 from typing import List
-from control_service import database
-from control_service.models import UserData, Stammdaten, sql_userdata, sql_stammdaten
+from control_service.models import UserData, Stammdaten, sql_userdata, sql_stammdaten,database
 from control_service.schemas import SETMARKETSCHEMA, get_validated_json
 from control_service.jsonhelper import market_to_obj
 # from flask import request, abort, jsonify
@@ -34,7 +33,7 @@ def get_marketstatic():
 
 
 @router.get('/market/<int:id>', response_model=Stammdaten)
-def get_market(id):
+async def get_market(id):
     """
     Endpoint: /market/
     Methods:  GET
@@ -46,7 +45,7 @@ def get_market(id):
 
 
 @router.get('/marketlist/', response_model=List[Stammdaten])
-def get_marketlist():
+async def get_marketlist():
     query = sql_stammdaten.query(Stammdaten).all()
     return await database.fetch_all(query)
 
@@ -88,7 +87,7 @@ def create_market():
         print(content)
         success = create_market_entity(content['MarketID'], content['Name'], content["Company"], content["GPSLocation"]
                                        ["Lat"], content["GPSLocation"]["Long"], content["Adresse"], content["Enabled"], content["Status"])
-        return {}"Success": success}
+        return {"Success": success}
     else:
         abort(400)
 

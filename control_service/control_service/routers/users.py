@@ -1,8 +1,7 @@
 from fastapi import APIRouter
 #from flask import Blueprint, jsonify, request, abort
 from functools import wraps
-from control_service import database
-from control_service.models import UserData, sql_userdata
+from control_service.models import UserData, sql_userdata,database
 from control_service.schemas import REGISTERSCHEMA, get_validated_json, PROFILESCHEMA
 from werkzeug.security import generate_password_hash
 from secrets import token_urlsafe

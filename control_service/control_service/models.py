@@ -2,8 +2,7 @@ import databases
 import sqlalchemy
 from pydantic import BaseModel
 from datetime import datetime
-from control_service import SQLALCHEMY_DATABASE_URI, app
-
+SQLALCHEMY_DATABASE_URI="sqlite:///./test.db"
 """
 Die Models entsprechend der API Beschreibung mit einer One-to-One Relation
 """
@@ -11,23 +10,24 @@ Die Models entsprechend der API Beschreibung mit einer One-to-One Relation
 database = databases.Database(SQLALCHEMY_DATABASE_URI)
 
 metadata = sqlalchemy.MetaData()
-
+#sqlalchemy.relationship('UserData', uselist=False, backref='market'),
 sql_stammdaten = sqlalchemy.Table(
     "Stammdaten",
-    sqlalchemy.Column(sqlalchemy.Integer, name='MarketID', primary_key=True),
-    sqlalchemy.Column(sqlalchemy.String(100), name='Name', unique=False, nullable=False),
-    sqlalchemy.Column(sqlalchemy.String(100), name='Firma', unique=False, nullable=False),
-    sqlalchemy.Column(sqlalchemy.Float, name='lat', unique=False, nullable=False),
-    sqlalchemy.Column(sqlalchemy.Float, name='long', unique=False, nullable=False),
-    sqlalchemy.Column(sqlalchemy.String(50), name='Adresse', unique=False, nullable=False),
-    sqlalchemy.Column(sqlalchemy.Boolean, name='Enabled'),
-    sqlalchemy.relationship('UserData', uselist=False, backref='market'),
-    sqlalchemy.Column(sqlalchemy.Integer, name='Status'),
+    metadata,
+    sqlalchemy.Column('MarketID',sqlalchemy.Integer,  primary_key=True),
+    sqlalchemy.Column( 'Name',sqlalchemy.String(100), unique=False, nullable=False),
+    sqlalchemy.Column( 'Firma',sqlalchemy.String(100), unique=False, nullable=False),
+    sqlalchemy.Column( 'lat',sqlalchemy.Float, unique=False, nullable=False),
+    sqlalchemy.Column( 'long',sqlalchemy.Float, unique=False, nullable=False),
+    sqlalchemy.Column( 'Adresse',sqlalchemy.String(50), unique=False, nullable=False),
+    sqlalchemy.Column( 'Enabled',sqlalchemy.Boolean),
+    sqlalchemy.Column('Status', sqlalchemy.Integer),
     sqlalchemy.Column(
+        'TimeStamp',
         sqlalchemy.DateTime,
-        name='TimeStamp',
         server_default=sqlalchemy.func.current_timestamp(),
-        server_onupdate=sqlalchemy.func.current_timestamp())
+        server_onupdate=sqlalchemy.func.current_timestamp()
+        )
  )
 
 
@@ -42,17 +42,17 @@ class Stammdaten(BaseModel):
     Status: int
     TimeStamp: datetime
 
-
+#sqlalchemy.Column('MarketID', sqlalchemy.Integer,sqlalchemy.ForeignKey('stammdaten.MarketID')),
 sql_userdata = sqlalchemy.Table(
     "UserData",
-    sqlalchemy.Column(sqlalchemy.Integer, name='UserID', primary_key=True),
-    sqlalchemy.Column(sqlalchemy.String(20), name='UserName', unique=False, nullable=False),
-    sqlalchemy.Column(sqlalchemy.String(100), name="password", nullable=False),
-    sqlalchemy.Column(sqlalchemy.Integer, name='Rolle'),
-    sqlalchemy.Column(sqlalchemy.String(50), name='Email'),
-    sqlalchemy.Column(sqlalchemy.String(20), name='Telefon'),
-    sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey('stammdaten.MarketID')),
-    sqlalchemy.Column(sqlalchemy.String(43), name='BearerToken', unique=True)
+    metadata,
+    sqlalchemy.Column( 'UserID',sqlalchemy.Integer, primary_key=True),
+    sqlalchemy.Column( 'UserName',sqlalchemy.String(20), unique=False, nullable=False),
+    sqlalchemy.Column( "password",sqlalchemy.String(100), nullable=False),
+    sqlalchemy.Column( 'Rolle',sqlalchemy.Integer),
+    sqlalchemy.Column( 'Email',sqlalchemy.String(50)),
+    sqlalchemy.Column( 'Telefon',sqlalchemy.String(20)),
+    sqlalchemy.Column( 'BearerToken',sqlalchemy.String(43), unique=True)
   )
 
 class UserData(BaseModel):
@@ -70,12 +70,3 @@ engine = sqlalchemy.create_engine(
     SQLALCHEMY_DATABASE_URI, connect_args={"check_same_thread": False}
 )
 metadata.create_all(engine)
-
-@app.on_event("startup")
-async def startup():
-    await database.connect()
-
-
-@app.on_event("shutdown")
-async def shutdown():
-    await database.disconnect()
