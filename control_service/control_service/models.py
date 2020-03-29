@@ -3,7 +3,7 @@ import sqlalchemy
 from pydantic import BaseModel
 from datetime import datetime
 import os
-SQLALCHEMY_DATABASE_URI=os.environ.get("CONNECTION_STRING","sqlite:////./test.db")
+SQLALCHEMY_DATABASE_URI=os.environ.get("CONNECTION_STRING","sqlite:///test.db")
 """
 Die Models entsprechend der API Beschreibung mit einer One-to-One Relation
 """
@@ -18,8 +18,8 @@ sql_stammdaten = sqlalchemy.Table(
     sqlalchemy.Column('MarketID',sqlalchemy.BIGINT,  primary_key=True),
     sqlalchemy.Column( 'Name',sqlalchemy.String(100), unique=False, nullable=False),
     sqlalchemy.Column( 'Firma',sqlalchemy.String(100), unique=False, nullable=False),
-    sqlalchemy.Column( 'lat',sqlalchemy.Double, unique=False, nullable=False),
-    sqlalchemy.Column( 'long',sqlalchemy.Double, unique=False, nullable=False),
+    sqlalchemy.Column( 'lat',sqlalchemy.Float, unique=False, nullable=False),
+    sqlalchemy.Column( 'long',sqlalchemy.Float, unique=False, nullable=False),
     sqlalchemy.Column( 'Adresse',sqlalchemy.String(50), unique=False, nullable=False),
     sqlalchemy.Column( 'Enabled',sqlalchemy.Boolean),
     sqlalchemy.Column('Status', sqlalchemy.Integer),
@@ -58,7 +58,7 @@ sql_userdata = sqlalchemy.Table(
     sqlalchemy.Column( 'Email',sqlalchemy.String(50)),
     sqlalchemy.Column( 'Telefon',sqlalchemy.String(20)),
     sqlalchemy.Column( 'BearerToken',sqlalchemy.String(43), unique=True),
-    sqlalchemy.Column( 'Enabled',sqlalchemy.Boolean,default=False)
+    sqlalchemy.Column( 'Enabled',sqlalchemy.Boolean,default=False,nullable=False)
   )
 
 class UserData(BaseModel):

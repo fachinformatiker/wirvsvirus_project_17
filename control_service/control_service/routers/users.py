@@ -70,8 +70,8 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
     return user
 
 async def get_current_active_user(current_user: UserData = Depends(get_current_user)):
-    if current_user.disabled:
-        raise HTTPException(status_code=400, detail="Inactive user")
+    if current_user.Enabled is False:
+        raise HTTPException(status_code=403, detail="Inactive user")
     return current_user
 
 
@@ -84,6 +84,8 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
             detail="Incorrect username or password",
             headers={"WWW-Authenticate": "Bearer"},
         )
+    if user.Enabled is False:
+        raise HTTPException(status_code=403, detail="Inactive user")
     access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     access_token = create_access_token(
         data={"sub": user.UserName}, expires_delta=access_token_expires
@@ -107,7 +109,8 @@ async def register(data: RegisterUser):
             UserName=data.UserName,
             password=get_password_hash(data.password),
             Email=data.Email,
-            Telefon=data.Telefon
+            Telefon=data.Telefon,
+            Enabled=False
         )
         await database.execute(query)
         response['Success'] = True
