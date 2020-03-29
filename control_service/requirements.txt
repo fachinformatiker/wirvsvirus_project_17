@@ -2,3 +2,5 @@ sqlalchemy
 schema
 fastapi
 databases
+uvicorn
+aiosqlite
