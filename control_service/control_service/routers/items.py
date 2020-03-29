@@ -1,6 +1,6 @@
-from fastapi import APIRouter , Depends
+from fastapi import APIRouter, Depends
 from typing import List
-from control_service.models import  Stammdaten, sql_stammdaten,database, Market_status,UserData
+from control_service.models import Stammdaten, sql_stammdaten, database, Market_status, UserData
 from control_service.routers.users import get_current_active_user
 
 router = APIRouter()
