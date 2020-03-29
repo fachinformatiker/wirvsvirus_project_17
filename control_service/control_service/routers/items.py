@@ -40,8 +40,17 @@ async def get_market(id):
 
 
 @router.get('/marketlist/', response_model=List[Stammdaten])
-async def get_marketlist():
-    query = sql_stammdaten.select()
+async def get_marketlist(x, y, width, heigth):
+    """
+    Endpoint: /marketlist/
+    Methods:  GET
+    Parameter:  x       - x coordinate bottom left
+                y       - x coordinate bottom left
+                width   - screen width
+                heigth  - screen heigth
+
+    """
+    query = sql_stammdaten.select().where(sql_stammdaten.c.lat >= x).where(sql_stammdaten.c.lat < x+width).where(sql_stammdaten.c.long >= y).where(sql_stammdaten.c.long < y+heigth).select()
     return await database.fetch_all(query)
 
 
