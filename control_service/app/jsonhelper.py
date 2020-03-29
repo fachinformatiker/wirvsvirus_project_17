@@ -1,4 +1,4 @@
-from control_service.models import Stammdaten
+from app.models import Stammdaten
 
 
 def market_to_obj(market: Stammdaten):

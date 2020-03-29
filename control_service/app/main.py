@@ -1,7 +1,7 @@
 #import uvicorn
 from fastapi import FastAPI
-from app.routers import items, users
-from app.models import database
+from .routers import items, users
+from .models import database
 #app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app = FastAPI()
 
