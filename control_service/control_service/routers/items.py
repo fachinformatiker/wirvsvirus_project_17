@@ -2,7 +2,7 @@ from fastapi import APIRouter
 from functools import wraps
 from typing import List
 from control_service.models import UserData, Stammdaten, sql_userdata, sql_stammdaten,database
-from control_service.schemas import SETMARKETSCHEMA, get_validated_json
+#from control_service.schemas import SETMARKETSCHEMA, get_validated_json
 from control_service.jsonhelper import market_to_obj
 # from flask import request, abort, jsonify
 # import jwt
@@ -40,13 +40,13 @@ async def get_market(id):
     Parameter: MarketID - id of the market
 
     """
-    query = sql_stammdaten.filter_by(id=id)
-    return await database.fetch_one()
+    query = sql_stammdaten.select().where(sql_stammdaten.c.MarketID==id)
+    return await database.fetch_one(query)
 
 
 @router.get('/marketlist/', response_model=List[Stammdaten])
 async def get_marketlist():
-    query = sql_stammdaten.query(Stammdaten).all()
+    query = sql_stammdaten.select()
     return await database.fetch_all(query)
 
 
@@ -61,7 +61,7 @@ def set_market():
     The function takes a json object with the key/value pairs descripted by Parameters and
     initiates the corresponding db change.
     """
-    content = get_validated_json(SETMARKETSCHEMA)
+    content = bla#get_validated_json(SETMARKETSCHEMA)
     success = update_market_status(content['MarketID'], content['Status'])
     return {"Success": success}
 
