@@ -8,7 +8,6 @@ app = FastAPI()
 
 app.include_router(users.router)
 app.include_router(items.router)
-
 @app.on_event("startup")
 async def startup():
     await database.connect()

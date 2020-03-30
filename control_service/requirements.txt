@@ -6,3 +6,4 @@ aiosqlite
 passlib[bcrypt]
 python-multipart
 pyjwt
+aiodns

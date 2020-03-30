@@ -66,7 +66,7 @@ class UserData(BaseModel):
     UserName: str
     Rolle: int
     Email: str
-    Telefon: str
+    Telefon: str = None
     BearerToken: str
     Enabled: bool=False
 
@@ -74,7 +74,7 @@ class RegisterUser(BaseModel):
     UserName: str
     password: str
     Email: str
-    Telefon: str
+    Telefon: str = None
 
 class UserInDB(UserData):
     hashed_password: str

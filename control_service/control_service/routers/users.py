@@ -5,6 +5,10 @@ import jwt
 from passlib.context import CryptContext
 from datetime import datetime, timedelta
 import os
+#from verify_email import verify_email
+import asyncio
+import aiodns
+import re
 
 # to get a string like this run:
 # openssl rand -hex 32
@@ -96,15 +100,37 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
 @router.post('/Register')
 async def register(data: RegisterUser):
 
-
-
-    query= sql_userdata.select().where(sql_userdata.c.UserName==data.UserName)
-    result=await database.fetch_one(query)
     response = {}
-    if result != None:
+    query = sql_userdata.select().where(sql_userdata.c.UserName == data.UserName)
+    query2 = sql_userdata.select().where(sql_userdata.c.Email == data.Email)
+    result = await database.fetch_one(query)
+    result2 = await database.fetch_one(query2)
+    if result is not None:
         response['Success'] = False
+        response['Reason'] = "Username taken"
+        return response
+    elif result2 is not None:
+        response['Success'] = False
+        response['Reason'] = "Email taken"
         return response
     else:
+        if not re.match(".+@[\w\.]+\..+",data.Email):
+            response['Success'] = False
+            response['Reason'] = "no right email format"
+            return response
+        try:
+            resolver = aiodns.DNSResolver()
+            email_hostname = data.Email[data.Email.find('@') + 1:]
+            MX_DNS = await  resolver.query(email_hostname, 'MX')
+        except aiodns.error.DNSError as e:
+            MX_DNS = None
+        print(MX_DNS)
+        if MX_DNS is None:
+            response['Success'] = False
+            response['Reason'] = "Email server not available"
+            return response
+
+
         query=sql_userdata.insert().values(
             UserName=data.UserName,
             password=get_password_hash(data.password),
