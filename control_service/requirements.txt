@@ -1,10 +1,9 @@
 sqlalchemy
 schema
 fastapi
-databases
+databases[postgresql]
 aiosqlite
 passlib[bcrypt]
 python-multipart
 pyjwt
 aiodns
-postgresql
