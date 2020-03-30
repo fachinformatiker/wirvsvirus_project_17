@@ -5,8 +5,6 @@ import jwt
 from passlib.context import CryptContext
 from datetime import datetime, timedelta
 import os
-#from verify_email import verify_email
-import asyncio
 import aiodns
 import re
 
