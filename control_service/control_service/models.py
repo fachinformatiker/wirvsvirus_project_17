@@ -4,6 +4,11 @@ from pydantic import BaseModel
 from datetime import datetime
 import os
 SQLALCHEMY_DATABASE_URI=os.environ.get("CONNECTION_STRING","sqlite:///test.db")
+if SQLALCHEMY_DATABASE_URI.find("sqlite:"):
+    connection_args = {"check_same_thread": False}
+else:
+    connection_args = {}
+
 """
 Die Models entsprechend der API Beschreibung mit einer One-to-One Relation
 """
@@ -92,6 +97,6 @@ class TokenData(BaseModel):
 
 
 engine = sqlalchemy.create_engine(
-    SQLALCHEMY_DATABASE_URI
+    SQLALCHEMY_DATABASE_URI,connect_args=connection_args
 )
 metadata.create_all(engine)
