@@ -67,8 +67,8 @@ class UserData(BaseModel):
     Rolle: int
     Email: str
     Telefon: str = None
-    BearerToken: str
     Enabled: bool=False
+
 
 class RegisterUser(BaseModel):
     UserName: str

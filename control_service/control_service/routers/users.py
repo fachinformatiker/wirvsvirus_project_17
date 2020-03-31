@@ -139,3 +139,9 @@ async def register(data: RegisterUser):
         await database.execute(query)
         response['Success'] = True
         return response
+
+@router.get('/GetUserProfil')
+async def getUserProfil(current_user: UserData = Depends(get_current_user)):
+    if current_user.Enabled is False:
+        raise HTTPException(status_code=403, detail="Inactive user")
+    return current_user
