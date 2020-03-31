@@ -51,7 +51,7 @@ async def get_marketlist(x=None, y=None, x2=None, y2=None):
 
     """
     if x is not None and y is not None and width is not None and heigth is not None:
-        query = sql_stammdaten.select().where(sql_stammdaten.c.lat >= x).where(sql_stammdaten.c.lat < x2).where(sql_stammdaten.c.long >= y).where(sql_stammdaten.c.long < y2)
+        query = sql_stammdaten.select().where(sql_stammdaten.c.lat >= x).where(sql_stammdaten.c.lat < x2).where(sql_stammdaten.c.long >= y2).where(sql_stammdaten.c.long < y)
     else:
         query = sql_stammdaten.select()
     return await database.fetch_all(query)
