@@ -92,6 +92,6 @@ class TokenData(BaseModel):
 
 
 engine = sqlalchemy.create_engine(
-    SQLALCHEMY_DATABASE_URI, connect_args={"check_same_thread": False}
+    SQLALCHEMY_DATABASE_URI
 )
 metadata.create_all(engine)
