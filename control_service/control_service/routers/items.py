@@ -58,7 +58,7 @@ async def get_marketlist(x=None, y=None, width=None, heigth=None):
 
 
 @router.put('/market/')
-async def set_market(status: Market_status):
+async def set_market(status: Market_status,current_user: UserData = Depends(get_current_active_user)):
     """
     Endpoint: /market/
     Methods:  PUT
