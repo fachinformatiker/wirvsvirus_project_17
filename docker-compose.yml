@@ -7,7 +7,7 @@ services:
     container_name: "controlservice"
     labels:
       - "traefik.enable=true"
-      - "traefik.http.services.controlservice.loadbalancer.server.port=5000"
+      - "traefik.http.services.controlservice.loadbalancer.server.port=80"
       - "traefik.http.routers.controlservice.entrypoints=web"
       - "traefik.http.routers.controlservice.rule=Host(`controlservice.localhost`)"
     networks:

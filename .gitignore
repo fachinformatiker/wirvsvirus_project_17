@@ -5,7 +5,9 @@
 __pycache__
 *.code-workspace
 *.sqlite
+*.db
 *.sqlite3
 *.pyc
 /Supermarkt_LiveTracker
 docker-compose.override.yml
+.ropeproject

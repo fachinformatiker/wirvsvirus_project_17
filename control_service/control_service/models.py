@@ -1,26 +1,97 @@
-from control_service import db
-
+import databases
+import sqlalchemy
+from pydantic import BaseModel
+from datetime import datetime
+import os
+SQLALCHEMY_DATABASE_URI=os.environ.get("CONNECTION_STRING","sqlite:///test.db")
 """
 Die Models entsprechend der API Beschreibung mit einer One-to-One Relation
 """
-class Stammdaten(db.Model):
-  id = db.Column(db.Integer,name='MarketID', primary_key=True)
-  name = db.Column(db.String(100), name='Name', unique=False, nullable=False)
-  company = db.Column(db.String(100),name='Firma', unique=False, nullable=False)
-  lat=db.Column(db.String(10),name='lat', unique=False, nullable=False)
-  long=db.Column(db.String(10), name='long', unique=False, nullable=False)
-  adresse = db.Column(db.String(50),name='Adresse', unique=False, nullable=False)
-  enabled = db.Column(db.Boolean, name='Enabled')
-  super_user = db.relationship('UserData', uselist=False, backref='market')
-  status = db.Column(db.Integer, name='Status')
-  timestamp = db.Column(db.DateTime, name='TimeStamp', server_default=db.func.current_timestamp(), server_onupdate=db.func.current_timestamp())
 
-class UserData(db.Model):
-  id = db.Column(db.Integer,name='UserID', primary_key=True)
-  user_name = db.Column(db.String(20),name='UserName', unique=False, nullable=False)
-  password = db.Column(db.String(94), nullable=False)
-  rolle = db.Column(db.Integer, name='Rolle')
-  mail = db.Column(db.String(50), name='Email')
-  telefon = db.Column(db.String(20), name='Telefon')
-  market_id = db.Column(db.Integer, db.ForeignKey('stammdaten.MarketID'))
-  token = db.Column(db.String(43), name='BearerToken', unique=True, nullable=False)
+database = databases.Database(SQLALCHEMY_DATABASE_URI)
+
+metadata = sqlalchemy.MetaData()
+#sqlalchemy.relationship('UserData', uselist=False, backref='market'),
+sql_stammdaten = sqlalchemy.Table(
+    "Stammdaten",
+    metadata,
+    sqlalchemy.Column('MarketID',sqlalchemy.BIGINT,  primary_key=True),
+    sqlalchemy.Column( 'Name',sqlalchemy.String(100), unique=False, nullable=False),
+    sqlalchemy.Column( 'Firma',sqlalchemy.String(100), unique=False, nullable=False),
+    sqlalchemy.Column( 'lat',sqlalchemy.Float, unique=False, nullable=False),
+    sqlalchemy.Column( 'long',sqlalchemy.Float, unique=False, nullable=False),
+    sqlalchemy.Column( 'Adresse',sqlalchemy.String(50), unique=False, nullable=False),
+    sqlalchemy.Column( 'Enabled',sqlalchemy.Boolean),
+    sqlalchemy.Column('Status', sqlalchemy.Integer),
+    sqlalchemy.Column(
+        'TimeStamp',
+        sqlalchemy.DateTime,
+        server_default=sqlalchemy.func.current_timestamp(),
+        server_onupdate=sqlalchemy.func.current_timestamp()
+        )
+ )
+
+
+class Stammdaten(BaseModel):
+    MarketID: int
+    Name: str
+    Firma: str
+    lat: float
+    long: float
+    Adresse: str
+    Enabled: bool = False
+    Status: int = None
+    TimeStamp: datetime = None
+
+class Market_status(BaseModel):
+    MarketID: int
+    Status: int
+
+#sqlalchemy.Column('MarketID', sqlalchemy.Integer,sqlalchemy.ForeignKey('stammdaten.MarketID')),
+sql_userdata = sqlalchemy.Table(
+    "UserData",
+    metadata,
+    sqlalchemy.Column( 'UserID',sqlalchemy.Integer, primary_key=True),
+    sqlalchemy.Column( 'UserName',sqlalchemy.String(20), unique=False, nullable=False),
+    sqlalchemy.Column( "password",sqlalchemy.String(94), nullable=False),
+    sqlalchemy.Column( 'Rolle',sqlalchemy.Integer),
+    sqlalchemy.Column( 'Email',sqlalchemy.String(50)),
+    sqlalchemy.Column( 'Telefon',sqlalchemy.String(20)),
+    sqlalchemy.Column( 'BearerToken',sqlalchemy.String(43), unique=True),
+    sqlalchemy.Column( 'Enabled',sqlalchemy.Boolean,default=False,nullable=False)
+  )
+
+class UserData(BaseModel):
+    UserID: int
+    UserName: str
+    Rolle: int
+    Email: str
+    Telefon: str = None
+    Enabled: bool=False
+
+
+class RegisterUser(BaseModel):
+    UserName: str
+    password: str
+    Email: str
+    Telefon: str = None
+
+class UserInDB(UserData):
+    hashed_password: str
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+
+
+class TokenData(BaseModel):
+    username: str = None
+
+
+
+
+
+engine = sqlalchemy.create_engine(
+    SQLALCHEMY_DATABASE_URI, connect_args={"check_same_thread": False}
+)
+metadata.create_all(engine)

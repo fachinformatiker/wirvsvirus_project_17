@@ -1,7 +1,5 @@
-FROM python:3-slim
-ENV FLASK_APP control_service
-ENV FLASK_ENV development
-COPY . /control_service/
-WORKDIR control_service
+FROM tiangolo/uvicorn-gunicorn:python3.7
+ENV MODULE_NAME control_service.main
+COPY requirements.txt requirements.txt
 RUN pip install -r requirements.txt
-ENTRYPOINT ["flask","run","--host=0.0.0.0"]
+COPY ./control_service /app/control_service

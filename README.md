@@ -34,7 +34,7 @@ lorem ipsum
 
 ### links
 
-Placeholder Domain: https://isolatedshopping.me
+Placeholder Domain: https://sicher-einkaufen.info/home
 
 Wiki: https://github.com/fachinformatiker/wirvsvirus_project_17/wiki
 
