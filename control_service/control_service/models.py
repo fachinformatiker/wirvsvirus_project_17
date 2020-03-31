@@ -25,6 +25,7 @@ sql_stammdaten = sqlalchemy.Table(
     sqlalchemy.Column( 'Firma',sqlalchemy.String(100), unique=False, nullable=False),
     sqlalchemy.Column( 'lat',sqlalchemy.Float, unique=False, nullable=False),
     sqlalchemy.Column( 'long',sqlalchemy.Float, unique=False, nullable=False),
+    sqlalchemy.Column( 'osmid',sqlalchemy.BIGINT, unique=False, nullable=False),
     sqlalchemy.Column( 'Adresse',sqlalchemy.String(50), unique=False, nullable=False),
     sqlalchemy.Column( 'Enabled',sqlalchemy.Boolean),
     sqlalchemy.Column('Status', sqlalchemy.Integer),
